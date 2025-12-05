@@ -9,6 +9,18 @@ from datetime import datetime, timedelta
 import json
 import os
 
+# Import database module
+try:
+    from database import (
+        is_database_available, get_db, 
+        Task, Habit, FocusItem, Settings,
+        task_to_dict, habit_to_dict, focus_to_dict
+    )
+    DATABASE_ENABLED = is_database_available()
+except ImportError:
+    DATABASE_ENABLED = False
+    print("⚠️  Database module not available, using JSON storage")
+
 # Initialize Flask app
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__,
@@ -17,8 +29,14 @@ app = Flask(__name__,
 
 CORS(app)
 
-# Data storage file
+# Data storage file (fallback for local development)
 DATA_FILE = os.path.join(basedir, 'data', 'flow_data.json')
+
+# Print storage mode
+if DATABASE_ENABLED:
+    print("💾 Using PostgreSQL database")
+else:
+    print("📝 Using JSON file storage")
 
 def ensure_data_dir():
     """Ensure data directory exists"""
