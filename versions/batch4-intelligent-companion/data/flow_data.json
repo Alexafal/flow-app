@@ -1,0 +1,119 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Study after dinner",
+      "completed": true,
+      "due_date": null,
+      "due_time": null,
+      "priority": "normal",
+      "created_at": "2025-12-04T17:40:46.189846",
+      "completed_at": "2025-12-04T17:41:05.674251"
+    },
+    {
+      "id": 2,
+      "title": "Do laundry",
+      "completed": true,
+      "due_date": null,
+      "due_time": null,
+      "priority": "normal",
+      "created_at": "2025-12-04T17:41:01.513879",
+      "completed_at": "2025-12-04T17:41:17.268751"
+    },
+    {
+      "id": 3,
+      "title": "Call mom",
+      "completed": true,
+      "due_date": null,
+      "due_time": null,
+      "priority": "normal",
+      "created_at": "2025-12-04T17:41:14.693294",
+      "completed_at": "2025-12-04T17:41:16.546127"
+    },
+    {
+      "id": 4,
+      "title": "Do Chem Past Paper",
+      "completed": false,
+      "due_date": "2025-12-06",
+      "due_time": null,
+      "priority": "normal",
+      "created_at": "2025-12-05T09:32:42.382608",
+      "completed_at": "2025-12-05T09:32:44.266892"
+    }
+  ],
+  "habits": [
+    {
+      "id": 1,
+      "name": "Plan your day",
+      "icon": "\ud83d\udcdd",
+      "streak": 0,
+      "completions": {},
+      "created_at": "2025-12-04T17:40:29.335341"
+    },
+    {
+      "id": 2,
+      "name": "Review goals",
+      "icon": "\ud83c\udfaf",
+      "streak": 0,
+      "completions": {},
+      "created_at": "2025-12-04T17:40:32.118731"
+    },
+    {
+      "id": 3,
+      "name": "Deep work session",
+      "icon": "\ud83d\udcbc",
+      "streak": 0,
+      "completions": {},
+      "created_at": "2025-12-04T17:40:33.153790",
+      "longest_streak": 1
+    },
+    {
+      "id": 4,
+      "name": "Run 2.4km",
+      "icon": "\ud83c\udfc3",
+      "frequency": "daily",
+      "frequency_count": 1,
+      "streak": 0,
+      "longest_streak": 1,
+      "completions": {},
+      "best_time": null,
+      "paused": false,
+      "created_at": "2025-12-05T09:54:16.895864"
+    },
+    {
+      "id": 5,
+      "name": "Study for 6 hours",
+      "icon": "\u270d\ufe0f",
+      "frequency": "daily",
+      "frequency_count": 1,
+      "streak": 0,
+      "longest_streak": 1,
+      "completions": {},
+      "best_time": null,
+      "paused": false,
+      "created_at": "2025-12-05T09:59:45.957256"
+    }
+  ],
+  "focus_items": [
+    {
+      "id": 1,
+      "text": "Finish 1-2 maths tys",
+      "date": "2025-12-04",
+      "completed": true
+    },
+    {
+      "id": 3,
+      "text": "Finish 1 chem paper",
+      "date": "2025-12-04",
+      "completed": true
+    },
+    {
+      "id": 5,
+      "text": "Review Front End Web Project",
+      "date": "2025-12-04",
+      "completed": true
+    }
+  ],
+  "stats": {},
+  "onboarding_complete": true
+}
