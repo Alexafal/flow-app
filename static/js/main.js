@@ -1590,11 +1590,19 @@ class FlowApp {
             });
         });
 
-        // Right-click context menu
+        // Right-click context menu + long-press for mobile
         document.querySelectorAll('.alltask-item').forEach(item => {
+            const taskId = parseInt(item.dataset.taskId);
+            
+            // Right-click (desktop)
             item.addEventListener('contextmenu', (e) => {
                 e.preventDefault();
-                const taskId = parseInt(item.dataset.taskId);
+                this.showTaskContextMenu(e, taskId);
+            });
+            
+            // Long-press (mobile)
+            this.addLongPressSupport(item, (e) => {
+                e.preventDefault();
                 this.showTaskContextMenu(e, taskId);
             });
         });
@@ -1850,14 +1858,21 @@ class FlowApp {
             });
         });
 
-        // Right-click context menu on tasks
+        // Right-click context menu on tasks + long-press for mobile
         document.querySelectorAll('.calendar-task-item').forEach(item => {
+            const taskId = item.dataset.taskId;
+            if (!taskId) return;
+            
+            // Right-click (desktop)
             item.addEventListener('contextmenu', (e) => {
                 e.preventDefault();
-                const taskId = item.dataset.taskId;
-                if (taskId) {
-                    this.showTaskContextMenu(e, taskId);
-                }
+                this.showTaskContextMenu(e, taskId);
+            });
+            
+            // Long-press (mobile)
+            this.addLongPressSupport(item, (e) => {
+                e.preventDefault();
+                this.showTaskContextMenu(e, taskId);
             });
         });
 
@@ -1870,14 +1885,22 @@ class FlowApp {
             });
         });
 
-        // Right-click context menu on habits
+        // Right-click context menu on habits + long-press for mobile
         document.querySelectorAll('.calendar-habit-item').forEach(item => {
+            const habitId = item.dataset.habitId;
+            if (!habitId) return;
+            const habitIdInt = parseInt(habitId);
+            
+            // Right-click (desktop)
             item.addEventListener('contextmenu', (e) => {
                 e.preventDefault();
-                const habitId = item.dataset.habitId;
-                if (habitId) {
-                    this.showHabitContextMenu(e, parseInt(habitId));
-                }
+                this.showHabitContextMenu(e, habitIdInt);
+            });
+            
+            // Long-press (mobile)
+            this.addLongPressSupport(item, (e) => {
+                e.preventDefault();
+                this.showHabitContextMenu(e, habitIdInt);
             });
         });
     }
@@ -2141,11 +2164,19 @@ class FlowApp {
             });
         });
 
-        // Right-click context menu on tasks
+        // Right-click context menu on tasks + long-press for mobile
         document.querySelectorAll('.bottom-sheet-task').forEach(taskEl => {
+            const taskId = parseInt(taskEl.dataset.taskId);
+            
+            // Right-click (desktop)
             taskEl.addEventListener('contextmenu', (e) => {
                 e.preventDefault();
-                const taskId = parseInt(taskEl.dataset.taskId);
+                this.showTaskContextMenu(e, taskId);
+            });
+            
+            // Long-press (mobile)
+            this.addLongPressSupport(taskEl, (e) => {
+                e.preventDefault();
                 this.showTaskContextMenu(e, taskId);
             });
         });
@@ -2177,11 +2208,19 @@ class FlowApp {
             });
         });
 
-        // Right-click context menu on habits
+        // Right-click context menu on habits + long-press for mobile
         document.querySelectorAll('.bottom-sheet-habit').forEach(habitEl => {
+            const habitId = parseInt(habitEl.dataset.habitId);
+            
+            // Right-click (desktop)
             habitEl.addEventListener('contextmenu', (e) => {
                 e.preventDefault();
-                const habitId = parseInt(habitEl.dataset.habitId);
+                this.showHabitContextMenu(e, habitId);
+            });
+            
+            // Long-press (mobile)
+            this.addLongPressSupport(habitEl, (e) => {
+                e.preventDefault();
                 this.showHabitContextMenu(e, habitId);
             });
         });
@@ -2192,13 +2231,29 @@ class FlowApp {
         const existing = document.getElementById('taskContextMenu');
         if (existing) existing.remove();
 
+        // Get coordinates (support both mouse and touch events)
+        let clientX, clientY;
+        if (event.touches && event.touches.length > 0) {
+            // Touch event
+            clientX = event.touches[0].clientX;
+            clientY = event.touches[0].clientY;
+        } else if (event.changedTouches && event.changedTouches.length > 0) {
+            // Touch end event
+            clientX = event.changedTouches[0].clientX;
+            clientY = event.changedTouches[0].clientY;
+        } else {
+            // Mouse event
+            clientX = event.clientX;
+            clientY = event.clientY;
+        }
+
         // Create context menu
         const menu = document.createElement('div');
         menu.id = 'taskContextMenu';
         menu.className = 'context-menu';
         menu.style.position = 'fixed';
-        menu.style.left = `${event.clientX}px`;
-        menu.style.top = `${event.clientY}px`;
+        menu.style.left = `${clientX}px`;
+        menu.style.top = `${clientY}px`;
         menu.style.zIndex = '10000';
 
         const task = this.tasks.find(t => t.id === taskId);
@@ -2788,8 +2843,14 @@ class FlowApp {
             });
         }
 
-        // Right-click context menu
+        // Right-click context menu (desktop) + long-press (mobile)
         taskEl.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            this.showTaskContextMenu(e, task.id);
+        });
+        
+        // Long-press for mobile
+        this.addLongPressSupport(taskEl, (e) => {
             e.preventDefault();
             this.showTaskContextMenu(e, task.id);
         });
@@ -2884,8 +2945,14 @@ class FlowApp {
                 }
             });
 
-            // Right-click context menu
+            // Right-click context menu (desktop) + long-press (mobile)
             habitEl.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                this.showHabitContextMenu(e, habit.id);
+            });
+            
+            // Long-press for mobile
+            this.addLongPressSupport(habitEl, (e) => {
                 e.preventDefault();
                 this.showHabitContextMenu(e, habit.id);
             });
@@ -2897,18 +2964,106 @@ class FlowApp {
         });
     }
 
+    // Helper function to add long-press support for mobile
+    addLongPressSupport(element, callback, eventOptions = {}) {
+        let pressTimer = null;
+        let hasMoved = false;
+        let touchStartX = 0;
+        let touchStartY = 0;
+        const longPressDelay = 500; // 500ms for long press
+        const moveThreshold = 10; // pixels to move before canceling
+
+        const handleTouchStart = (e) => {
+            hasMoved = false;
+            const touch = e.touches[0];
+            touchStartX = touch.clientX;
+            touchStartY = touch.clientY;
+
+            pressTimer = setTimeout(() => {
+                if (!hasMoved) {
+                    // Create a synthetic event with touch coordinates
+                    const syntheticEvent = {
+                        touches: e.touches,
+                        changedTouches: e.changedTouches,
+                        preventDefault: () => e.preventDefault(),
+                        stopPropagation: () => e.stopPropagation()
+                    };
+                    
+                    // Vibrate if supported (tactile feedback)
+                    if (navigator.vibrate) {
+                        navigator.vibrate(50);
+                    }
+                    
+                    callback(syntheticEvent);
+                    hasMoved = true; // Prevent default touch behavior
+                }
+            }, longPressDelay);
+        };
+
+        const handleTouchMove = (e) => {
+            if (!pressTimer) return;
+            
+            const touch = e.touches[0];
+            const deltaX = Math.abs(touch.clientX - touchStartX);
+            const deltaY = Math.abs(touch.clientY - touchStartY);
+            
+            if (deltaX > moveThreshold || deltaY > moveThreshold) {
+                hasMoved = true;
+                clearTimeout(pressTimer);
+                pressTimer = null;
+            }
+        };
+
+        const handleTouchEnd = (e) => {
+            if (pressTimer) {
+                clearTimeout(pressTimer);
+                pressTimer = null;
+            }
+        };
+
+        const handleTouchCancel = (e) => {
+            if (pressTimer) {
+                clearTimeout(pressTimer);
+                pressTimer = null;
+            }
+            hasMoved = false;
+        };
+
+        // Add touch event listeners
+        element.addEventListener('touchstart', handleTouchStart, { passive: false });
+        element.addEventListener('touchmove', handleTouchMove, { passive: true });
+        element.addEventListener('touchend', handleTouchEnd, { passive: true });
+        element.addEventListener('touchcancel', handleTouchCancel, { passive: true });
+    }
+
     showHabitContextMenu(event, habitId) {
         // Remove any existing context menu
         const existing = document.getElementById('habitContextMenu');
         if (existing) existing.remove();
+
+        // Get coordinates (support both mouse and touch events)
+        let clientX, clientY;
+        if (event.touches && event.touches.length > 0) {
+            // Touch event
+            clientX = event.touches[0].clientX;
+            clientY = event.touches[0].clientY;
+        } else if (event.changedTouches && event.changedTouches.length > 0) {
+            // Touch end event
+            clientX = event.changedTouches[0].clientX;
+            clientY = event.changedTouches[0].clientY;
+        } else {
+            // Mouse event
+            clientX = event.clientX;
+            clientY = event.clientY;
+        }
 
         // Create context menu
         const menu = document.createElement('div');
         menu.id = 'habitContextMenu';
         menu.className = 'context-menu';
         menu.style.position = 'fixed';
-        menu.style.left = `${event.clientX}px`;
-        menu.style.top = `${event.clientY}px`;
+        menu.style.left = `${clientX}px`;
+        menu.style.top = `${clientY}px`;
         menu.style.zIndex = '10000';
 
         const habit = this.habits.find(h => h.id === habitId);
