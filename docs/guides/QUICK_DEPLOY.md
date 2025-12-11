@@ -34,7 +34,7 @@ git commit -m "Ready for deployment"
 git branch -M main
 
 # Create repo on GitHub first, then:
-git remote add origin https://github.com/YOUR_USERNAME/flow-app.git
+git remote add origin https://github.com/Alexafal/flow-app.git
 git push -u origin main
 ```
 

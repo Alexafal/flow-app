@@ -14,7 +14,7 @@
       "status": "not_started",
       "tags": [],
       "created_at": "2025-12-05T13:05:58.141143",
-      "completed_at": "2025-12-05T13:39:58.650746",
+      "completed_at": "2025-12-06T21:14:32.312397",
       "postponed_count": 0,
       "subtasks": []
     },
@@ -22,7 +22,7 @@
       "id": 2,
       "title": "Organize Study Plan",
       "description": "",
-      "completed": false,
+      "completed": true,
       "due_date": "2025-12-05",
       "due_time": "09:30",
       "duration": 60,
@@ -32,7 +32,139 @@
       "status": "not_started",
       "tags": [],
       "created_at": "2025-12-05T13:08:37.503945",
-      "completed_at": "2025-12-05T13:54:52.310875",
+      "completed_at": "2025-12-05T21:43:59.762001",
+      "postponed_count": 0,
+      "subtasks": []
+    },
+    {
+      "id": 3,
+      "title": "Drink water",
+      "description": "",
+      "completed": true,
+      "due_date": "2025-12-05",
+      "due_time": null,
+      "duration": 30,
+      "priority": "normal",
+      "auto_priority": 0,
+      "category": "health",
+      "status": "not_started",
+      "tags": [
+        "health"
+      ],
+      "created_at": "2025-12-05T21:57:55.913301",
+      "completed_at": "2025-12-06T21:14:14.969245",
+      "postponed_count": 0,
+      "subtasks": []
+    },
+    {
+      "id": 5,
+      "title": "Exercise",
+      "description": "",
+      "completed": true,
+      "due_date": "2025-12-05",
+      "due_time": null,
+      "duration": 30,
+      "priority": "normal",
+      "auto_priority": 0,
+      "category": "health",
+      "status": "not_started",
+      "tags": [
+        "health"
+      ],
+      "created_at": "2025-12-05T21:57:56.041275",
+      "completed_at": "2025-12-06T21:14:13.655715",
+      "postponed_count": 0,
+      "subtasks": []
+    },
+    {
+      "id": 6,
+      "title": "Healthy breakfast",
+      "description": "",
+      "completed": true,
+      "due_date": "2025-12-05",
+      "due_time": null,
+      "duration": 30,
+      "priority": "normal",
+      "auto_priority": 0,
+      "category": "health",
+      "status": "not_started",
+      "tags": [
+        "health"
+      ],
+      "created_at": "2025-12-05T21:57:56.108727",
+      "completed_at": "2025-12-06T21:14:12.146836",
+      "postponed_count": 0,
+      "subtasks": []
+    },
+    {
+      "id": 7,
+      "title": "Finish 2 Chem HCI Topical Revision (C6-7)",
+      "description": "",
+      "completed": false,
+      "due_date": "2025-12-10",
+      "due_time": "02:00",
+      "duration": 300,
+      "priority": "high",
+      "auto_priority": 0,
+      "category": "study",
+      "status": "not_started",
+      "tags": [],
+      "created_at": "2025-12-06T21:14:56.188882",
+      "completed_at": "2025-12-11T21:26:54.628594",
+      "postponed_count": 0,
+      "subtasks": []
+    },
+    {
+      "id": 8,
+      "title": "Finish 1 Chem Promos Past Paper (HCI)",
+      "description": "",
+      "completed": false,
+      "due_date": "2025-12-11",
+      "due_time": null,
+      "duration": 150,
+      "priority": "medium",
+      "auto_priority": 0,
+      "category": "study",
+      "status": "not_started",
+      "tags": [],
+      "created_at": "2025-12-06T21:15:02.716473",
+      "completed_at": null,
+      "postponed_count": 0,
+      "subtasks": []
+    },
+    {
+      "id": 9,
+      "title": "Finish Lecture on Maths C15 (Application of Integration)",
+      "description": "",
+      "completed": false,
+      "due_date": "2025-12-12",
+      "due_time": null,
+      "duration": 400,
+      "priority": "medium",
+      "auto_priority": 0,
+      "category": "study",
+      "status": "not_started",
+      "tags": [],
+      "created_at": "2025-12-06T21:15:21.778680",
+      "completed_at": null,
+      "postponed_count": 0,
+      "subtasks": []
+    },
+    {
+      "id": 10,
+      "title": "Start learning 1-2 weeks of Harvard CS50 Web",
+      "description": "",
+      "completed": false,
+      "due_date": "2025-12-10",
+      "due_time": null,
+      "duration": 30,
+      "priority": "medium",
+      "auto_priority": 0,
+      "category": "personal",
+      "status": "not_started",
+      "tags": [],
+      "created_at": "2025-12-10T14:13:11.323894",
+      "completed_at": null,
       "postponed_count": 0,
       "subtasks": []
     }
@@ -42,64 +174,111 @@
       "id": 1,
       "name": "Plan your day",
       "icon": "\ud83d\udcdd",
-      "streak": 0,
-      "completions": {},
+      "streak": 1,
+      "completions": {
+        "2025-12-05": true,
+        "2025-12-06": true,
+        "2025-12-10": true
+      },
       "created_at": "2025-12-04T17:40:29.335341",
-      "longest_streak": 1
+      "longest_streak": 2
     },
     {
       "id": 2,
       "name": "Review goals",
       "icon": "\ud83c\udfc3",
       "streak": 0,
-      "completions": {},
+      "completions": {
+        "2025-12-11": true
+      },
       "created_at": "2025-12-04T17:40:32.118731",
       "longest_streak": 1,
       "frequency": "custom",
       "frequency_count": 1,
-      "category": ""
+      "category": "",
+      "archived": true
     },
     {
       "id": 4,
-      "name": "Run 2.4km",
+      "name": "Exercise (Swim/Gym/Run/Bball)",
       "icon": "\ud83c\udfc3",
       "frequency": "custom",
-      "frequency_count": 3,
-      "streak": 1,
+      "frequency_count": 6,
+      "streak": 0,
       "longest_streak": 3,
       "completions": {
         "2025-11-27": true,
-        "2025-12-05": true
+        "2025-12-05": true,
+        "2025-12-06": true,
+        "2025-12-10": true,
+        "2025-12-11": true
       },
       "best_time": null,
       "paused": false,
-      "created_at": "2025-12-05T09:54:16.895864"
+      "created_at": "2025-12-05T09:54:16.895864",
+      "category": "health"
     },
     {
       "id": 5,
       "name": "Study for 6 hours",
       "icon": "\u270d\ufe0f",
-      "frequency": "daily",
-      "frequency_count": 1,
+      "frequency": "custom",
+      "frequency_count": 3,
       "streak": 0,
-      "longest_streak": 1,
-      "completions": {},
+      "longest_streak": 2,
+      "completions": {
+        "2025-12-10": true,
+        "2025-12-11": true
+      },
       "best_time": null,
       "paused": false,
       "created_at": "2025-12-05T09:59:45.957256"
     },
     {
       "id": 6,
-      "name": "Sleep for 8 Hours",
-      "icon": "\ud83d\ude34",
+      "name": "Sleep for 6-8 Hours",
+      "icon": "\u2728",
+      "frequency": "custom",
+      "frequency_count": 3,
+      "streak": 0,
+      "longest_streak": 2,
+      "completions": {
+        "2025-12-10": true,
+        "2025-12-11": true
+      },
+      "best_time": null,
+      "paused": false,
+      "created_at": "2025-12-05T13:57:06.632873",
+      "category": ""
+    },
+    {
+      "id": 7,
+      "name": "Coding",
+      "icon": "\ud83d\udcbb",
+      "frequency": "custom",
+      "frequency_count": 3,
+      "streak": 0,
+      "longest_streak": 2,
+      "completions": {
+        "2025-12-10": true,
+        "2025-12-11": true
+      },
+      "best_time": null,
+      "paused": false,
+      "created_at": "2025-12-10T14:15:27.299611"
+    },
+    {
+      "id": 8,
+      "name": "Review GP Flashcards",
+      "icon": "\ud83d\udcda",
       "frequency": "daily",
       "frequency_count": 1,
       "streak": 0,
-      "longest_streak": 1,
+      "longest_streak": 0,
       "completions": {},
       "best_time": null,
       "paused": false,
-      "created_at": "2025-12-05T13:57:06.632873"
+      "created_at": "2025-12-11T10:15:41.145484"
     }
   ],
   "focus_items": [
@@ -120,6 +299,18 @@
       "text": "Review Front End Web Project",
       "date": "2025-12-04",
       "completed": true
+    },
+    {
+      "id": 4,
+      "text": "Finish HCI Chem TYS C6-7",
+      "date": "2025-12-10",
+      "completed": true
+    },
+    {
+      "id": 6,
+      "text": "Finish 1-2 weeks of Harvard CS50 Web Dev",
+      "date": "2025-12-10",
+      "completed": true
     }
   ],
   "stats": {},
@@ -130,6 +321,21 @@
       "level": 3,
       "note": "",
       "timestamp": "2025-12-05T10:51:02.298566"
+    },
+    "2025-12-06": {
+      "level": 4,
+      "note": "",
+      "timestamp": "2025-12-06T21:14:44.510200"
+    },
+    "2025-12-10": {
+      "level": 2,
+      "note": "",
+      "timestamp": "2025-12-10T14:10:59.269583"
+    },
+    "2025-12-11": {
+      "level": 2,
+      "note": "",
+      "timestamp": "2025-12-11T10:14:45.250551"
     }
   },
   "behavior_data": {
@@ -177,7 +383,15 @@
       13,
       13,
       13,
-      13
+      13,
+      21,
+      21,
+      21,
+      21,
+      21,
+      21,
+      21,
+      21
     ],
     "completion_days": [
       "Friday",
@@ -223,7 +437,15 @@
       "Friday",
       "Friday",
       "Friday",
-      "Friday"
+      "Friday",
+      "Friday",
+      "Friday",
+      "Friday",
+      "Saturday",
+      "Saturday",
+      "Saturday",
+      "Saturday",
+      "Thursday"
     ],
     "task_categories": {}
   }

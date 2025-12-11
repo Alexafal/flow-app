@@ -27,18 +27,12 @@ const FlowIcons = {
         </svg>
     `,
     
-    // Logo Mark (simplified for small sizes)
+    // Logo Mark (simplified for small sizes) - Dynamic color based on theme
     logoMark: `
         <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="20" cy="20" r="18" fill="url(#markGradient)"/>
+            <circle cx="20" cy="20" r="18" fill="var(--theme-primary, #A9C6FF)"/>
             <path d="M20 10 C24 14, 26 17, 26 20 C26 24.5, 23 28, 20 28 C17 28, 14 24.5, 14 20 C14 17, 16 14, 20 10 Z" 
                   fill="white" opacity="0.9"/>
-            <defs>
-                <linearGradient id="markGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#A9C6FF;stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#C3D7FF;stop-opacity:1" />
-                </linearGradient>
-            </defs>
         </svg>
     `,
     
@@ -82,6 +76,13 @@ const FlowIcons = {
             <line x1="18" y1="20" x2="18" y2="10"></line>
             <line x1="12" y1="20" x2="12" y2="4"></line>
             <line x1="6" y1="20" x2="6" y2="14"></line>
+        </svg>
+    `,
+    
+    settings: `
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M12 1v6m0 6v6M5.64 5.64l4.24 4.24m4.24 4.24l4.24 4.24M1 12h6m6 0h6M5.64 18.36l4.24-4.24m4.24-4.24l4.24-4.24"></path>
         </svg>
     `,
     

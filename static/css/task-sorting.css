@@ -1,0 +1,179 @@
+/* Task Sorting Controls */
+
+.sort-control-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.sort-control {
+    position: relative;
+    display: inline-block;
+}
+
+.sort-dropdown-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs, 0.5rem);
+    padding: var(--space-sm, 0.75rem) var(--space-md, 1rem);
+    background: white;
+    border: 2px solid var(--border-color, #E4E4E6);
+    border-radius: var(--radius-md, 12px);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #2C2C2C;
+    cursor: pointer;
+    transition: all 0.2s var(--ease-smooth, ease);
+    font-family: inherit;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.sort-dropdown-btn:hover {
+    border-color: var(--theme-primary, var(--calm-primary, #A9C6FF));
+    background: rgba(169, 198, 255, 0.05);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-soft, 0 2px 8px rgba(79, 79, 85, 0.08));
+}
+
+.sort-dropdown-btn:active {
+    transform: translateY(0);
+}
+
+.sort-icon {
+    font-size: 1rem;
+}
+
+.sort-label {
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.sort-arrow {
+    font-size: 0.75rem;
+    opacity: 0.6;
+    transition: transform 0.2s;
+}
+
+.sort-dropdown-btn[aria-expanded="true"] .sort-arrow,
+.sort-control.active .sort-arrow {
+    transform: rotate(180deg);
+}
+
+.sort-dropdown-menu {
+    position: absolute;
+    top: calc(100% + var(--space-xs, 0.5rem));
+    right: 0;
+    min-width: 200px;
+    background: white;
+    border: 2px solid var(--border-color, #E4E4E6);
+    border-radius: var(--radius-md, 12px);
+    box-shadow: var(--shadow-modal, 0 8px 32px rgba(79, 79, 85, 0.12));
+    z-index: 1000;
+    overflow: hidden;
+    animation: slideDown 0.2s var(--ease-smooth, ease);
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.sort-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: var(--space-sm, 0.75rem) var(--space-md, 1rem);
+    background: none;
+    border: none;
+    text-align: left;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #2C2C2C;
+    cursor: pointer;
+    transition: background 0.15s;
+    font-family: inherit;
+}
+
+.sort-option:hover {
+    background: var(--bg-secondary, #F6F6F7);
+}
+
+.sort-option.active {
+    background: rgba(169, 198, 255, 0.1);
+    color: var(--theme-primary, var(--calm-primary, #A9C6FF));
+    font-weight: 600;
+}
+
+.sort-option .check-icon {
+    color: var(--theme-primary, var(--calm-primary, #A9C6FF));
+    font-weight: bold;
+    margin-left: var(--space-sm, 0.75rem);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .sort-dropdown-btn {
+        padding: var(--space-xs, 0.5rem) var(--space-sm, 0.75rem);
+        font-size: 0.8125rem;
+    }
+    
+    .sort-label {
+        display: none;
+    }
+    
+    .sort-dropdown-menu {
+        right: 0;
+        left: auto;
+        min-width: 180px;
+    }
+}
+
+/* Integration with existing controls */
+.alltasks-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md, 1rem);
+    align-items: flex-start;
+    margin-bottom: var(--space-lg, 1.5rem);
+}
+
+/* Sort control as a filter group */
+.alltasks-controls .filter-group .sort-control-wrapper {
+    margin-left: 0;
+    width: 100%;
+}
+
+.alltasks-controls .sort-control-wrapper {
+    margin-left: 0;
+    width: 100%;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-md, 1rem);
+}
+
+.section-header .sort-control-wrapper {
+    margin-left: auto;
+    margin-right: var(--space-md, 1rem);
+}
+
+/* Day view sort control */
+.day-section .sort-control-wrapper {
+    margin-bottom: var(--space-md, 1rem);
+    margin-top: var(--space-xs, 0.5rem);
+}
+
+.day-section .sort-control-wrapper .sort-dropdown-menu {
+    right: 0;
+    left: auto;
+}

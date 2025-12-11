@@ -1,0 +1,159 @@
+/* Compact Circular Search Button for Mobile */
+
+@media (max-width: 768px) {
+    
+    /* ============================================
+       COMPACT CIRCULAR SEARCH BUTTON
+       ============================================ */
+    
+    .global-search-bar {
+        flex: 0 0 auto !important;
+        max-width: none !important;
+        min-width: 0 !important;
+        width: auto !important;
+    }
+    
+    .search-input-wrapper {
+        position: relative;
+        width: 44px !important;
+        height: 44px !important;
+        padding: 0 !important;
+        border-radius: 50% !important;
+        background: rgba(255, 255, 255, 0.9) !important;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 2px solid rgba(228, 228, 230, 0.6) !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: visible;
+        box-sizing: border-box;
+    }
+    
+    .search-input-wrapper:active {
+        transform: scale(0.95);
+        background: rgba(255, 255, 255, 1) !important;
+    }
+    
+    /* Hide input when collapsed */
+    .search-input-wrapper .search-input {
+        display: none;
+    }
+    
+    /* Show search icon only when collapsed */
+    .search-input-wrapper .search-icon {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        margin: 0 !important;
+        padding: 0;
+        font-size: 1.125rem;
+        color: var(--calm-text-1, #4F4F55);
+        cursor: pointer;
+        flex-shrink: 0;
+    }
+    
+    /* Hide close button when collapsed */
+    .search-input-wrapper .search-close {
+        display: none !important;
+    }
+    
+    /* Expanded state - full search bar */
+    .search-input-wrapper.expanded {
+        width: auto !important;
+        min-width: 200px;
+        max-width: calc(100vw - 100px);
+        height: 44px;
+        padding: 0 0.875rem 0 0.875rem !important;
+        border-radius: 22px !important;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 0.625rem;
+    }
+    
+    .search-input-wrapper.expanded .search-input {
+        display: block !important;
+        flex: 1;
+        min-width: 0;
+        padding: 0;
+        font-size: 0.9375rem;
+        color: var(--calm-text-1, #4F4F55);
+        background: transparent;
+        border: none;
+        outline: none;
+        height: auto;
+        line-height: 1.5;
+    }
+    
+    .search-input-wrapper.expanded .search-icon {
+        margin: 0 !important;
+        width: auto;
+        height: auto;
+        font-size: 1rem;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .search-input-wrapper.expanded .search-close {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        margin: 0 0 0 0.5rem !important;
+        padding: 0;
+        background: none;
+        border: none;
+        color: var(--calm-text-2, #8C8C91);
+        font-size: 1.25rem;
+        cursor: pointer;
+        border-radius: 50%;
+        transition: all 0.2s;
+        flex-shrink: 0;
+    }
+    
+    .search-input-wrapper.expanded .search-close:hover,
+    .search-input-wrapper.expanded .search-close:active {
+        background: rgba(0, 0, 0, 0.05);
+    }
+    
+    /* Focus state */
+    .search-input-wrapper.expanded:focus-within {
+        border-color: var(--theme-primary, var(--calm-primary, #A9C6FF)) !important;
+        box-shadow: 0 0 0 4px rgba(169, 198, 255, 0.2);
+        background: rgba(255, 255, 255, 1) !important;
+    }
+    
+    /* Header actions spacing */
+    .header-actions {
+        gap: 0.5rem !important;
+    }
+    
+    .header-settings-btn {
+        width: 44px !important;
+        height: 44px !important;
+        flex-shrink: 0;
+    }
+    
+    /* Ensure search and settings are same size */
+    .global-search-bar,
+    .header-settings-btn {
+        width: 44px;
+        height: 44px;
+    }
+    
+}
+
+/* Desktop - keep original search bar */
+@media (min-width: 769px) {
+    .search-input-wrapper.expanded {
+        width: auto !important;
+        min-width: 200px;
+    }
+}

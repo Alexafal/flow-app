@@ -7,9 +7,9 @@
 ## 🎯 I Want To...
 
 ### **Get Started**
-✅ [Install and run the app](docs/guides/QUICKSTART.md) → 5 minutes
-✅ [First-time setup](docs/guides/START_HERE.md) → Onboarding walkthrough
-✅ [Learn all features](docs/guides/QUICK_REFERENCE.md) → Feature cheat sheet
+✅ [Install and run the app](START_HERE.md) → Quick start guide
+✅ [Learn all features](QUICK_REFERENCE.md) → Feature cheat sheet
+✅ [Learn from versions](docs/learning/LEARNING_GUIDE.md) → Complete learning path
 
 ### **Understand the App**
 ✅ [See what it can do](docs/technical/FEATURES.md) → Complete feature list

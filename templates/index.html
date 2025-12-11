@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#A9C6FF">
@@ -19,11 +19,87 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/design-system.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/calm-theme.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/calm-enhancements.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/batch6-features.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/batch7-features.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/task-sorting.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-optimization.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/spacing-optimization.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-nav-redesign.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/search-compact.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/light-theme-fix.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/themes.css') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Login Modal (Batch 7) -->
+    <div id="loginModal" class="login-modal" style="display: none;">
+        <div class="login-content">
+            <div class="login-header">
+                <h2 id="loginModalTitle">Welcome to Flow</h2>
+                <p id="loginModalSubtitle">Sign in to continue</p>
+            </div>
+            
+            <div class="login-tabs" style="display: flex; gap: var(--space-sm); margin-bottom: var(--space-lg); border-bottom: 2px solid var(--calm-line);">
+                <button class="login-tab active" id="loginTabBtn" style="flex: 1; padding: var(--space-sm); border: none; background: transparent; color: var(--calm-text-1); cursor: pointer; border-bottom: 2px solid var(--calm-primary); margin-bottom: -2px; font-weight: 500;">Login</button>
+                <button class="login-tab" id="signupTabBtn" style="flex: 1; padding: var(--space-sm); border: none; background: transparent; color: var(--calm-text-2); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; font-weight: 500;">Sign Up</button>
+            </div>
+            
+            <div class="social-login-buttons">
+                <button class="social-login-btn google" id="googleLoginBtn">
+                    <span>🔵</span>
+                    Continue with Google
+                </button>
+                <button class="social-login-btn apple" id="appleLoginBtn">
+                    <span>⚫</span>
+                    Continue with Apple
+                </button>
+                <button class="social-login-btn github" id="githubLoginBtn">
+                    <span>🐙</span>
+                    Continue with GitHub
+                </button>
+            </div>
+            
+            <div class="login-divider">
+                <span>or</span>
+            </div>
+            
+            <div class="passwordless-options">
+                <input type="text" id="nameInput" class="input-field" placeholder="Your name (signup only)" style="display: none; margin-bottom: var(--space-sm);">
+                <input type="email" id="emailInput" class="input-field" placeholder="Enter your email">
+                <button class="passwordless-btn" id="magicLinkBtn">📧 Send Magic Link</button>
+                <button class="passwordless-btn" id="otpBtn">🔢 Send OTP Code</button>
+                <p class="auth-note" style="font-size: 0.85rem; color: var(--calm-text-2); margin-top: var(--space-md); text-align: center; padding: var(--space-sm); background: var(--calm-bg); border-radius: var(--radius-sm); line-height: 1.5;">
+                    <strong>Note:</strong> OAuth and email features require backend configuration with API keys. Currently in mock mode for testing.
+                </p>
+            </div>
+            
+            <div style="margin-top: var(--space-md);">
+                <label style="display: flex; align-items: center; gap: var(--space-sm); font-size: 0.85rem; color: var(--calm-text-2);">
+                    <input type="checkbox" id="rememberDevice">
+                    Remember this device
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- OTP Modal (Batch 7) -->
+    <div id="otpModal" class="login-modal" style="display: none; z-index: 10001;">
+        <div class="login-content">
+            <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-lg);">
+                <h3 style="margin: 0;">Enter OTP Code</h3>
+                <button class="modal-close" id="closeOtpModal" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--calm-text-2);">×</button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: var(--space-md); color: var(--calm-text-2);">We sent a code to your email</p>
+                <input type="text" id="otpInput" class="input-field" placeholder="000000" maxlength="6" style="text-align: center; font-size: 1.5rem; letter-spacing: 0.5rem; font-family: monospace; padding: var(--space-md);">
+                <button class="btn-primary" id="verifyOtpBtn" style="width: 100%; margin-top: var(--space-md);">Verify</button>
+                <button class="passwordless-btn" id="resendOtpBtn" style="width: 100%; margin-top: var(--space-sm); text-align: center;">Resend Code</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Onboarding Screen -->
     <div id="onboarding" class="onboarding-screen">
         <div class="onboarding-content">
@@ -84,9 +160,11 @@
                     <span class="logo-icon" id="app-logo-icon"></span>
                     <h1 class="logo-text">Flow</h1>
                 </div>
-                <div class="header-stats" id="headerStats">
-                    <span class="stat-badge" id="tasksCount">0 tasks</span>
-                    <span class="stat-badge" id="habitsCount">0 habits</span>
+                <div class="header-actions">
+                    <div id="globalSearchBar" class="global-search-bar"></div>
+                    <button class="header-settings-btn" id="headerSettingsBtn" data-tab="settings" title="Settings">
+                        <span class="icon icon-sm" id="icon-settings-header"></span>
+                    </button>
                 </div>
             </div>
         </header>
@@ -110,23 +188,46 @@
                 <span class="icon icon-sm" id="icon-habits"></span>
                 <span class="nav-label">Habits</span>
             </button>
-            <button class="nav-item ripple tap-scale" data-tab="focus">
+            <button class="nav-item ripple tap-scale" data-tab="alltasks">
+                <span class="icon icon-sm" id="icon-alltasks"></span>
+                <span class="nav-label">Tasks</span>
+            </button>
+            <button class="nav-item ripple tap-scale nav-item-mobile-hidden" data-tab="focus">
                 <span class="icon icon-sm" id="icon-focus"></span>
                 <span class="nav-label">Focus</span>
             </button>
-            <button class="nav-item ripple tap-scale" data-tab="stats">
-                <span class="icon icon-sm" id="icon-stats"></span>
-                <span class="nav-label">Stats</span>
-            </button>
-            <button class="nav-item ripple tap-scale" data-tab="reflect">
+            <button class="nav-item ripple tap-scale nav-item-mobile-hidden" data-tab="reflect">
                 <span class="icon icon-sm" id="icon-reflect"></span>
                 <span class="nav-label">Reflect</span>
             </button>
-            <button class="nav-item ripple tap-scale" data-tab="alltasks">
-                <span class="icon icon-sm" id="icon-alltasks"></span>
-                <span class="nav-label">All Tasks</span>
+            <button class="nav-item ripple tap-scale nav-item-mobile-hidden" data-tab="stats">
+                <span class="icon icon-sm" id="icon-stats"></span>
+                <span class="nav-label">Stats</span>
+            </button>
+            <!-- More button for mobile -->
+            <button class="nav-more-btn" id="navMoreBtn">
+                <span class="icon icon-sm">⋯</span>
+                <span class="nav-label">More</span>
             </button>
         </nav>
+        
+        <!-- More Menu (Bottom Sheet) -->
+        <div class="nav-overlay" id="navOverlay"></div>
+        <div class="nav-more-menu" id="navMoreMenu">
+            <div class="more-menu-title">More</div>
+            <button class="more-menu-item" data-tab="focus">
+                <span class="icon icon-sm" id="icon-focus-menu"></span>
+                <span class="menu-label">Focus</span>
+            </button>
+            <button class="more-menu-item" data-tab="reflect">
+                <span class="icon icon-sm" id="icon-reflect-menu"></span>
+                <span class="menu-label">Reflect</span>
+            </button>
+            <button class="more-menu-item" data-tab="stats">
+                <span class="icon icon-sm" id="icon-stats-menu"></span>
+                <span class="menu-label">Stats</span>
+            </button>
+        </div>
 
         <!-- Main Content -->
         <main class="main-content">
@@ -158,13 +259,25 @@
 
                 <div class="section-header">
                     <h2>Today</h2>
-                    <div class="progress-indicator" id="todayProgress">
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="progressFill"></div>
+                    <div style="display: flex; gap: var(--space-md); align-items: center;">
+                        <div class="sort-control-wrapper" id="sortControlToday"></div>
+                        <button class="btn-icon" id="scheduleTodayBtn" title="Schedule Today" style="display: none;">
+                            <span class="icon icon-sm">📅</span>
+                        </button>
+                        <button class="btn-icon" id="focusModeBtn" title="Focus Mode">
+                            <span class="icon icon-sm">⏱️</span>
+                        </button>
+                        <div class="progress-indicator" id="todayProgress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progressFill"></div>
+                            </div>
+                            <span class="progress-text" id="progressText">0%</span>
                         </div>
-                        <span class="progress-text" id="progressText">0%</span>
                     </div>
                 </div>
+                
+                <!-- Task Sections (Batch 6) -->
+                <div id="taskSectionsContainer" style="display: none;"></div>
 
                 <!-- Focus Items Preview -->
                 <div class="focus-preview" id="focusPreview">
@@ -244,8 +357,167 @@
                 </div>
             </div>
 
+            <!-- Settings Tab -->
+            <div class="tab-content" id="settingsTab">
+                <div class="settings-container">
+                    <h2>Settings</h2>
+                    
+                    <!-- Account Section -->
+                    <div class="settings-section">
+                        <h3>Account</h3>
+                        <div class="settings-item">
+                            <div class="settings-item-content">
+                                <div>
+                                    <div class="settings-item-title">Email</div>
+                                    <div class="settings-item-description" id="userEmail">user@example.com</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="settings-item">
+                            <button class="btn-secondary" id="logoutBtn" style="width: 100%;">Logout</button>
+                        </div>
+                    </div>
+
+                    <!-- Notifications Section -->
+                    <div class="settings-section">
+                        <h3>Notifications</h3>
+                        <div class="settings-item">
+                            <div class="settings-item-content">
+                                <div>
+                                    <div class="settings-item-title">Enable Notifications</div>
+                                    <div class="settings-item-description">Receive push notifications for reminders</div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="notificationsEnabled" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-item-content">
+                                <div>
+                                    <div class="settings-item-title">Quiet Hours</div>
+                                    <div class="settings-item-description">Don't send notifications during these hours</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: var(--space-sm); align-items: center; margin-top: var(--space-sm);">
+                                <input type="time" id="quietHoursStart" class="input-field" value="22:00" style="flex: 1;">
+                                <span>to</span>
+                                <input type="time" id="quietHoursEnd" class="input-field" value="08:00" style="flex: 1;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Calendar Sync Section -->
+                    <div class="settings-section">
+                        <h3>Calendar</h3>
+                        <div class="settings-item">
+                            <div class="settings-item-content">
+                                <div>
+                                    <div class="settings-item-title">Google Calendar Sync</div>
+                                    <div class="settings-item-description" id="calendarSyncStatus">Not connected</div>
+                                </div>
+                                <button class="btn-secondary" id="connectCalendarBtnSettings">Connect</button>
+                            </div>
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-item-content">
+                                <div>
+                                    <div class="settings-item-title">Auto-sync</div>
+                                    <div class="settings-item-description">Automatically sync calendar every 5 minutes</div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="autoSyncEnabled" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Appearance Section -->
+                    <div class="settings-section">
+                        <h3>Appearance</h3>
+                        <div class="settings-item">
+                            <div class="settings-item-content">
+                                <div>
+                                    <div class="settings-item-title">Theme</div>
+                                    <div class="settings-item-description">Choose your preferred theme</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: var(--space-sm); margin-top: var(--space-sm);">
+                                <button class="theme-btn" data-theme="calm" style="background: #A9C6FF;">Calm</button>
+                                <button class="theme-btn" data-theme="sunset" style="background: #FFB3BA;">Sunset</button>
+                                <button class="theme-btn" data-theme="forest" style="background: #BAFFC9;">Forest</button>
+                            </div>
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-item-content">
+                                <div>
+                                    <div class="settings-item-title">High Contrast Mode</div>
+                                    <div class="settings-item-description">Increase contrast for better visibility</div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="highContrastEnabled">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Data & Privacy Section -->
+                    <div class="settings-section">
+                        <h3>Data & Privacy</h3>
+                        <div class="settings-item">
+                            <button class="btn-secondary" id="exportDataBtn" style="width: 100%; margin-bottom: var(--space-sm);">Export All Data</button>
+                            <button class="btn-secondary" id="importDataBtn" style="width: 100%; margin-bottom: var(--space-sm);">Import Data</button>
+                            <button class="btn-danger" id="deleteDataBtn" style="width: 100%;">Delete All Data</button>
+                        </div>
+                    </div>
+
+                    <!-- About Section -->
+                    <div class="settings-section">
+                        <h3>About</h3>
+                        <div class="settings-item">
+                            <div class="settings-item-content">
+                                <div>
+                                    <div class="settings-item-title">Version</div>
+                                    <div class="settings-item-description">Flow App v1.0.0</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Stats Tab -->
             <div class="tab-content" id="statsTab">
+                <!-- Export/Import Panel (Batch 7) -->
+                <div class="export-import-panel" style="margin-bottom: var(--space-lg);">
+                    <h3>Data Management</h3>
+                    <div class="export-section">
+                        <h4>Export</h4>
+                        <button class="export-btn" id="exportTasksCSV">📊 Export Tasks (CSV)</button>
+                        <button class="export-btn" id="exportCalendarICS">📅 Export Calendar (ICS)</button>
+                        <button class="export-btn" id="exportNotesMD">📝 Export Notes (Markdown)</button>
+                    </div>
+                    <div class="import-section">
+                        <h4>Import</h4>
+                        <label class="import-btn">
+                            📊 Import Tasks (CSV)
+                            <input type="file" id="importTasksCSV" accept=".csv" style="display: none;">
+                        </label>
+                        <label class="import-btn">
+                            📅 Import Calendar (ICS)
+                            <input type="file" id="importCalendarICS" accept=".ics" style="display: none;">
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Activity Log (Batch 6) -->
+                <div class="stat-card" style="margin-bottom: var(--space-lg);">
+                    <h3>Activity Log</h3>
+                    <div id="activityLogContent"></div>
+                </div>
                 <div class="stats-container">
                     <!-- Productivity Score -->
                     <div class="productivity-score-card">
@@ -257,8 +529,8 @@
                                         stroke-dasharray="283" stroke-dashoffset="283" transform="rotate(-90 50 50)"/>
                                 <defs>
                                     <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" style="stop-color:#667eea"/>
-                                        <stop offset="100%" style="stop-color:#764ba2"/>
+                                        <stop offset="0%" style="stop-color:var(--theme-primary, #A9C6FF)"/>
+                                        <stop offset="100%" style="stop-color:var(--theme-primary-dark, #8BB3FF)"/>
                                     </linearGradient>
                                 </defs>
                             </svg>
@@ -358,6 +630,21 @@
 
             <!-- All Tasks Tab -->
             <div class="tab-content" id="alltasksTab">
+                <!-- Templates (Batch 6) -->
+                <div style="display: flex; gap: var(--space-md); margin-bottom: var(--space-lg); align-items: center;">
+                    <button class="btn-secondary" id="showTemplatesBtn">📝 Templates</button>
+                </div>
+                
+                <!-- Templates Modal -->
+                <div class="modal" id="templatesModal" style="display: none;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>Templates</h3>
+                            <button class="modal-close" id="closeTemplatesModal">×</button>
+                        </div>
+                        <div class="modal-body" id="templatesContent"></div>
+                    </div>
+                </div>
                 <div class="alltasks-container">
                     <div class="alltasks-header">
                         <h2>All Tasks</h2>
@@ -388,6 +675,10 @@
                                     <button class="filter-pill" data-filter="category" data-value="personal">🏠 Personal</button>
                                     <button class="filter-pill" data-filter="category" data-value="health">💪 Health</button>
                                 </div>
+                            </div>
+                            <div class="filter-group">
+                                <div class="filter-label">Sort By</div>
+                                <div class="sort-control-wrapper" id="sortControlAllTasks"></div>
                             </div>
                         </div>
                     </div>
@@ -813,6 +1104,31 @@
     <script src="{{ url_for('static', filename='js/icons.js') }}"></script>
     <script src="{{ url_for('static', filename='js/api.js') }}"></script>
     <script src="{{ url_for('static', filename='js/utils.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/icons.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/search.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/undo-redo.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/focus-mode.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/gestures.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dragdrop.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/task-groups.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/templates.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/activity-log.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/scheduling.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/offline.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/ios-shortcuts.js') }}"></script>
+    <!-- Batch 7: Enterprise Features -->
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/calendar-sync.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/enhanced-offline.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/export-import.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/smart-parser.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/keyboard-shortcuts.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/widgets.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/enhanced-pomodoro.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/notifications.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/cross-device-sync.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/calendar-ux.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/task-sorting.js') }}"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     
     <!-- PWA Registration -->

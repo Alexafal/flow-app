@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#A9C6FF">
+    <meta name="description" content="Get things done. Feel good doing it. A beautiful to-do and habit tracker.">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    
+    <!-- iOS Icons -->
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='icon-192.png') }}">
+    
+    <title>Flow - Get things done. Feel good doing it.</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/design-system.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/calm-theme.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/calm-enhancements.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/batch6-features.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Onboarding Screen -->
+    <div id="onboarding" class="onboarding-screen">
+        <div class="onboarding-content">
+            <div class="onboarding-header">
+                <h1 class="app-title">Flow</h1>
+                <p class="app-tagline">Get things done. Feel good doing it.</p>
+            </div>
+            
+            <div class="onboarding-step" id="step1">
+                <h2>Choose your mode</h2>
+                <p style="opacity: 0.9; margin-bottom: 2rem;">This customizes your experience</p>
+                <div class="improvement-options">
+                    <button class="option-card" data-mode="student">
+                        <span class="option-icon">🎓</span>
+                        <span>Student</span>
+                    </button>
+                    <button class="option-card" data-mode="fitness">
+                        <span class="option-icon">💪</span>
+                        <span>Fitness</span>
+                    </button>
+                    <button class="option-card" data-mode="productivity">
+                        <span class="option-icon">⚡</span>
+                        <span>Productivity</span>
+                    </button>
+                    <button class="option-card" data-mode="minimalist">
+                        <span class="option-icon">✨</span>
+                        <span>Minimalist</span>
+                    </button>
+                    <button class="option-card" data-mode="entrepreneur">
+                        <span class="option-icon">💼</span>
+                        <span>Entrepreneur</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="onboarding-step hidden" id="step2">
+                <h2>Let's start with these habits:</h2>
+                <div class="suggested-habits" id="suggestedHabits"></div>
+                <button class="btn-primary" id="skipHabits">Skip for now</button>
+            </div>
+            
+            <div class="onboarding-step hidden" id="step3">
+                <h2>Add your first task</h2>
+                <div class="task-input-container">
+                    <input type="text" id="firstTaskInput" class="task-input" placeholder="e.g., Study at 7pm">
+                    <button class="btn-primary" id="addFirstTask">Add Task</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="app" class="app-container hidden">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="app-logo">
+                    <span class="logo-icon" id="app-logo-icon"></span>
+                    <h1 class="logo-text">Flow</h1>
+                </div>
+                <div class="header-stats" id="headerStats">
+                    <span class="stat-badge" id="tasksCount">0 tasks</span>
+                    <span class="stat-badge" id="habitsCount">0 habits</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Motivation Banner -->
+        <div class="motivation-banner" id="motivationBanner">
+            <p id="praiseMessage">Loading...</p>
+        </div>
+
+        <!-- Floating Navigation (Premium Design) -->
+        <nav class="floating-nav" id="floatingNav">
+            <button class="nav-item active ripple tap-scale" data-tab="today">
+                <span class="icon icon-sm" id="icon-today"></span>
+                <span class="nav-label">Today</span>
+            </button>
+            <button class="nav-item ripple tap-scale" data-tab="calendar">
+                <span class="icon icon-sm" id="icon-calendar"></span>
+                <span class="nav-label">Calendar</span>
+            </button>
+            <button class="nav-item ripple tap-scale" data-tab="habits">
+                <span class="icon icon-sm" id="icon-habits"></span>
+                <span class="nav-label">Habits</span>
+            </button>
+            <button class="nav-item ripple tap-scale" data-tab="focus">
+                <span class="icon icon-sm" id="icon-focus"></span>
+                <span class="nav-label">Focus</span>
+            </button>
+            <button class="nav-item ripple tap-scale" data-tab="stats">
+                <span class="icon icon-sm" id="icon-stats"></span>
+                <span class="nav-label">Stats</span>
+            </button>
+            <button class="nav-item ripple tap-scale" data-tab="reflect">
+                <span class="icon icon-sm" id="icon-reflect"></span>
+                <span class="nav-label">Reflect</span>
+            </button>
+            <button class="nav-item ripple tap-scale" data-tab="alltasks">
+                <span class="icon icon-sm" id="icon-alltasks"></span>
+                <span class="nav-label">All Tasks</span>
+            </button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Today Tab -->
+            <div class="tab-content active" id="todayTab">
+                <!-- Smart Suggestions Panel -->
+                <div class="smart-suggestions-panel" id="smartSuggestionsPanel" style="display: none;">
+                    <div class="suggestions-header">
+                        <h3><span class="icon icon-sm" id="icon-suggestions"></span> Smart Suggestions</h3>
+                        <button class="dismiss-suggestions" id="dismissSuggestions">×</button>
+                    </div>
+                    <div id="suggestionsList"></div>
+                </div>
+
+                <!-- Mood Check-In (Daily) -->
+                <div class="mood-check-card" id="moodCheckCard" style="display: none;">
+                    <div class="mood-check-header">
+                        <span>How are you feeling today?</span>
+                        <button class="mood-close" id="closeMoodCheck">×</button>
+                    </div>
+                    <div class="mood-options">
+                        <button class="mood-option" data-mood="1"><span class="icon icon-md mood-icon-1"></span></button>
+                        <button class="mood-option" data-mood="2"><span class="icon icon-md mood-icon-2"></span></button>
+                        <button class="mood-option" data-mood="3"><span class="icon icon-md mood-icon-3"></span></button>
+                        <button class="mood-option" data-mood="4"><span class="icon icon-md mood-icon-4"></span></button>
+                        <button class="mood-option" data-mood="5"><span class="icon icon-md mood-icon-5"></span></button>
+                    </div>
+                </div>
+
+                <div class="section-header">
+                    <h2>Today</h2>
+                    <div class="progress-indicator" id="todayProgress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <span class="progress-text" id="progressText">0%</span>
+                    </div>
+                </div>
+
+                <!-- Focus Items Preview -->
+                <div class="focus-preview" id="focusPreview">
+                    <h3>Today's Focus</h3>
+                    <div class="focus-items-mini" id="focusItemsMini"></div>
+                </div>
+
+                <!-- Add Task -->
+                <div class="add-task-container">
+                    <input type="text" id="taskInput" class="task-input" placeholder="Add a task... (e.g., Study at 7pm)">
+                    <button class="add-btn" id="addTaskBtn">+</button>
+                </div>
+
+                <!-- Tasks List -->
+                <div class="tasks-list" id="tasksList">
+                    <!-- Tasks will be dynamically added here -->
+                </div>
+            </div>
+
+            <!-- Calendar Tab -->
+            <div class="tab-content" id="calendarTab">
+                <div class="calendar-header">
+                    <button class="calendar-nav-btn" id="prevPeriod">←</button>
+                    <div class="calendar-title">
+                        <h2 id="calendarTitle">Today</h2>
+                        <div class="view-switcher">
+                            <button class="view-btn active" data-view="day">Day</button>
+                            <button class="view-btn" data-view="week">Week</button>
+                            <button class="view-btn" data-view="month">Month</button>
+                        </div>
+                    </div>
+                    <button class="calendar-nav-btn" id="nextPeriod">→</button>
+                </div>
+                
+                <button class="btn-today" id="goToToday">Today</button>
+                
+                <div id="calendarView" class="calendar-container">
+                    <!-- Calendar content will be rendered here -->
+                </div>
+            </div>
+
+            <!-- Habits Tab -->
+            <div class="tab-content" id="habitsTab">
+                <div class="section-header">
+                    <h2>Habits</h2>
+                    <button class="btn-icon" id="addHabitBtn">+</button>
+                </div>
+
+                <!-- Aging Tasks Alert -->
+                <div class="aging-alert" id="agingAlert" style="display: none;">
+                    <div class="alert-content">
+                        <span class="alert-icon">⚠️</span>
+                        <div class="alert-text">
+                            <strong>Some tasks need attention</strong>
+                            <p id="agingAlertMessage"></p>
+                        </div>
+                        <button class="alert-close" id="closeAgingAlert">×</button>
+                    </div>
+                </div>
+
+                <div class="habits-grid" id="habitsGrid">
+                    <!-- Habits will be dynamically added here -->
+                </div>
+            </div>
+
+            <!-- Focus Tab -->
+            <div class="tab-content" id="focusTab">
+                <div class="focus-mode">
+                    <h2>What are the 3 most important things today?</h2>
+                    <div class="focus-inputs" id="focusInputs">
+                        <input type="text" class="focus-input" placeholder="Priority 1" maxlength="50">
+                        <input type="text" class="focus-input" placeholder="Priority 2" maxlength="50">
+                        <input type="text" class="focus-input" placeholder="Priority 3" maxlength="50">
+                    </div>
+                    <button class="btn-primary" id="setFocusBtn">Set Focus</button>
+                    <div class="current-focus" id="currentFocus"></div>
+                </div>
+            </div>
+
+            <!-- Stats Tab -->
+            <div class="tab-content" id="statsTab">
+                <div class="stats-container">
+                    <!-- Productivity Score -->
+                    <div class="productivity-score-card">
+                        <h3>Productivity Score</h3>
+                        <div class="score-circle" id="productivityScore">
+                            <svg viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="45" fill="none" stroke="#e5e7eb" stroke-width="8"/>
+                                <circle id="scoreCircle" cx="50" cy="50" r="45" fill="none" stroke="url(#scoreGradient)" stroke-width="8" 
+                                        stroke-dasharray="283" stroke-dashoffset="283" transform="rotate(-90 50 50)"/>
+                                <defs>
+                                    <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#667eea"/>
+                                        <stop offset="100%" style="stop-color:#764ba2"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <div class="score-text" id="scoreText">0</div>
+                        </div>
+                        <p class="score-label">Overall Performance</p>
+                    </div>
+
+                    <!-- Achievements -->
+                    <div class="achievements-section">
+                        <h3>🏆 Achievements</h3>
+                        <div class="achievements-grid" id="achievementsGrid"></div>
+                    </div>
+
+                    <!-- Productivity Analytics -->
+                    <div class="analytics-section">
+                        <h3>📈 Productivity Patterns</h3>
+                        <div id="analyticsContent"></div>
+                    </div>
+
+                    <!-- Mood Patterns -->
+                    <div class="mood-patterns-section">
+                        <h3>💭 Mood & Productivity</h3>
+                        <div id="moodPatternsContent"></div>
+                    </div>
+
+                    <!-- Insights Section -->
+                    <div class="insights-section" id="insightsSection">
+                        <h3><span class="icon icon-sm" id="icon-insights"></span> Insights</h3>
+                        <div id="insightsList"></div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-value" id="tasksCompleted">0</div>
+                        <div class="stat-label">Tasks Completed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="longestStreak">0</div>
+                        <div class="stat-label">Longest Streak</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="perfectDays">0</div>
+                        <div class="stat-label">Perfect Days</div>
+                    </div>
+                    
+                    <div class="weekly-heatmap">
+                        <h3>This Week</h3>
+                        <div class="heatmap-grid" id="heatmapGrid"></div>
+                    </div>
+
+                    <!-- Weekly Review -->
+                    <div class="weekly-review-card">
+                        <h3>📅 Weekly Review</h3>
+                        <button class="btn-primary" id="showWeeklyReview">View This Week</button>
+                        <div id="weeklyReviewContent"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reflect Tab -->
+            <div class="tab-content" id="reflectTab">
+                <div class="reflection-container">
+                    <h2>End of Day Reflection</h2>
+                    <p class="reflection-subtitle">Take a moment to reflect on your day</p>
+                    
+                    <div class="reflection-form">
+                        <div class="form-group">
+                            <label>What went well today?</label>
+                            <textarea id="wentWell" class="reflection-textarea" placeholder="Celebrate your wins, big or small..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>What are you grateful for?</label>
+                            <textarea id="grateful" class="reflection-textarea" placeholder="Three things you're thankful for..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Energy Level</label>
+                            <div class="energy-selector">
+                                <button class="energy-btn" data-level="1"><span class="icon icon-md energy-icon-1"></span></button>
+                                <button class="energy-btn" data-level="2"><span class="icon icon-md energy-icon-2"></span></button>
+                                <button class="energy-btn" data-level="3"><span class="icon icon-md energy-icon-3"></span></button>
+                                <button class="energy-btn" data-level="4"><span class="icon icon-md energy-icon-4"></span></button>
+                                <button class="energy-btn" data-level="5"><span class="icon icon-md energy-icon-5"></span></button>
+                            </div>
+                        </div>
+                        
+                        <button class="btn-primary" id="saveReflection">Save Reflection</button>
+                    </div>
+
+                    <div class="past-reflections" id="pastReflections">
+                        <h3>Recent Reflections</h3>
+                        <div id="reflectionsList"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- All Tasks Tab -->
+            <div class="tab-content" id="alltasksTab">
+                <div class="alltasks-container">
+                    <div class="alltasks-header">
+                        <h2>All Tasks</h2>
+                        <div class="alltasks-controls">
+                            <div class="filter-group">
+                                <div class="filter-label">Status</div>
+                                <div class="filter-pills">
+                                    <button class="filter-pill active" data-filter="status" data-value="all">All</button>
+                                    <button class="filter-pill" data-filter="status" data-value="incomplete">Incomplete</button>
+                                    <button class="filter-pill" data-filter="status" data-value="completed">Completed</button>
+                                </div>
+                            </div>
+                            <div class="filter-group">
+                                <div class="filter-label">Priority</div>
+                                <div class="filter-pills">
+                                    <button class="filter-pill active" data-filter="priority" data-value="all">All</button>
+                                    <button class="filter-pill priority-high" data-filter="priority" data-value="high">High</button>
+                                    <button class="filter-pill priority-medium" data-filter="priority" data-value="medium">Medium</button>
+                                    <button class="filter-pill priority-low" data-filter="priority" data-value="low">Low</button>
+                                </div>
+                            </div>
+                            <div class="filter-group">
+                                <div class="filter-label">Category</div>
+                                <div class="filter-pills">
+                                    <button class="filter-pill active" data-filter="category" data-value="all">All</button>
+                                    <button class="filter-pill" data-filter="category" data-value="work">💼 Work</button>
+                                    <button class="filter-pill" data-filter="category" data-value="study">📚 Study</button>
+                                    <button class="filter-pill" data-filter="category" data-value="personal">🏠 Personal</button>
+                                    <button class="filter-pill" data-filter="category" data-value="health">💪 Health</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="alltasks-list" id="alltasksList">
+                        <!-- Tasks will be rendered here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <!-- Add Habit Modal -->
+    <div class="modal" id="addHabitModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Habit</h3>
+                <button class="modal-close" id="closeHabitModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="habitNameInput" class="input-field" placeholder="Habit name (e.g., Drink water)">
+                
+                <div class="form-group">
+                    <label>Icon:</label>
+                    <div class="icon-grid" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--space-sm); margin-top: var(--space-sm);">
+                        <!-- Water & Health -->
+                        <button class="icon-option selected" data-icon="💧" title="Water">
+                            <span class="habit-icon">💧</span>
+                        </button>
+                        <button class="icon-option" data-icon="🍎" title="Healthy eating">
+                            <span class="habit-icon">🍎</span>
+                        </button>
+                        <button class="icon-option" data-icon="💪" title="Exercise">
+                            <span class="habit-icon">💪</span>
+                        </button>
+                        <button class="icon-option" data-icon="🏃" title="Running">
+                            <span class="habit-icon">🏃</span>
+                        </button>
+                        <button class="icon-option" data-icon="🧘" title="Yoga/Meditation">
+                            <span class="habit-icon">🧘</span>
+                        </button>
+                        <button class="icon-option" data-icon="😴" title="Sleep">
+                            <span class="habit-icon">😴</span>
+                        </button>
+                        
+                        <!-- Learning & Productivity -->
+                        <button class="icon-option" data-icon="📚" title="Reading">
+                            <span class="habit-icon">📚</span>
+                        </button>
+                        <button class="icon-option" data-icon="✍️" title="Writing">
+                            <span class="habit-icon">✍️</span>
+                        </button>
+                        <button class="icon-option" data-icon="🎯" title="Goals">
+                            <span class="habit-icon">🎯</span>
+                        </button>
+                        <button class="icon-option" data-icon="⚡" title="Energy">
+                            <span class="habit-icon">⚡</span>
+                        </button>
+                        <button class="icon-option" data-icon="🧠" title="Learning">
+                            <span class="habit-icon">🧠</span>
+                        </button>
+                        <button class="icon-option" data-icon="💻" title="Coding">
+                            <span class="habit-icon">💻</span>
+                        </button>
+                        
+                        <!-- Wellness & Self-care -->
+                        <button class="icon-option" data-icon="🌱" title="Growth">
+                            <span class="habit-icon">🌱</span>
+                        </button>
+                        <button class="icon-option" data-icon="🍃" title="Nature">
+                            <span class="habit-icon">🍃</span>
+                        </button>
+                        <button class="icon-option" data-icon="💆" title="Self-care">
+                            <span class="habit-icon">💆</span>
+                        </button>
+                        <button class="icon-option" data-icon="🛁" title="Relaxation">
+                            <span class="habit-icon">🛁</span>
+                        </button>
+                        <button class="icon-option" data-icon="🌙" title="Evening routine">
+                            <span class="habit-icon">🌙</span>
+                        </button>
+                        <button class="icon-option" data-icon="☀️" title="Morning routine">
+                            <span class="habit-icon">☀️</span>
+                        </button>
+                        
+                        <!-- Creative & Social -->
+                        <button class="icon-option" data-icon="🎨" title="Art">
+                            <span class="habit-icon">🎨</span>
+                        </button>
+                        <button class="icon-option" data-icon="🎵" title="Music">
+                            <span class="habit-icon">🎵</span>
+                        </button>
+                        <button class="icon-option" data-icon="📸" title="Photography">
+                            <span class="habit-icon">📸</span>
+                        </button>
+                        <button class="icon-option" data-icon="👥" title="Social">
+                            <span class="habit-icon">👥</span>
+                        </button>
+                        <button class="icon-option" data-icon="💬" title="Communication">
+                            <span class="habit-icon">💬</span>
+                        </button>
+                        <button class="icon-option" data-icon="❤️" title="Love">
+                            <span class="habit-icon">❤️</span>
+                        </button>
+                        
+                        <!-- Motivation & General -->
+                        <button class="icon-option" data-icon="🔥" title="Streak">
+                            <span class="habit-icon">🔥</span>
+                        </button>
+                        <button class="icon-option" data-icon="✨" title="Shine">
+                            <span class="habit-icon">✨</span>
+                        </button>
+                        <button class="icon-option" data-icon="⭐" title="Star">
+                            <span class="habit-icon">⭐</span>
+                        </button>
+                        <button class="icon-option" data-icon="🎁" title="Reward">
+                            <span class="habit-icon">🎁</span>
+                        </button>
+                        <button class="icon-option" data-icon="☕" title="Coffee">
+                            <span class="habit-icon">☕</span>
+                        </button>
+                        <button class="icon-option" data-icon="🌟" title="Achievement">
+                            <span class="habit-icon">🌟</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Frequency:</label>
+                    <div class="frequency-btn-group" style="display: flex; gap: var(--space-sm); margin-top: var(--space-sm);">
+                        <button type="button" class="frequency-btn active" data-frequency="daily">
+                            <span>☀️</span>
+                            <span>Daily</span>
+                        </button>
+                        <button type="button" class="frequency-btn" data-frequency="weekly">
+                            <span>📅</span>
+                            <span>Weekly</span>
+                        </button>
+                        <button type="button" class="frequency-btn" data-frequency="custom">
+                            <span>⚙️</span>
+                            <span>Custom</span>
+                        </button>
+                    </div>
+                    <input type="number" id="habitFrequencyCount" class="input-field" placeholder="Times per week (1-7)" min="1" max="7" style="display:none; margin-top:0.75rem;">
+                </div>
+                
+                <div class="form-group">
+                    <label>Category:</label>
+                    <div class="category-btn-group" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-sm); margin-top: var(--space-sm);">
+                        <button type="button" class="category-btn active" data-category="">
+                            <span>No category</span>
+                        </button>
+                        <button type="button" class="category-btn" data-category="health">
+                            <span>💪 Health</span>
+                        </button>
+                        <button type="button" class="category-btn" data-category="productivity">
+                            <span>⚡ Productivity</span>
+                        </button>
+                        <button type="button" class="category-btn" data-category="learning">
+                            <span>📚 Learning</span>
+                        </button>
+                        <button type="button" class="category-btn" data-category="wellness">
+                            <span>🍃 Wellness</span>
+                        </button>
+                        <button type="button" class="category-btn" data-category="social">
+                            <span>👥 Social</span>
+                        </button>
+                        <button type="button" class="category-btn" data-category="creative">
+                            <span>🎨 Creative</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <button class="btn-primary" id="saveHabitBtn">Add Habit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Habit Modal -->
+    <div class="modal" id="editHabitModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Habit</h3>
+                <button class="modal-close" id="closeEditHabitModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="editHabitNameInput" class="input-field" placeholder="Habit name">
+                <div class="icon-selector">
+                    <label>Icon:</label>
+                    <div class="icon-options" id="editHabitIconOptions">
+                        <button class="icon-option" data-icon="💧">💧</button>
+                        <button class="icon-option" data-icon="📚">📚</button>
+                        <button class="icon-option" data-icon="🏃">🏃</button>
+                        <button class="icon-option" data-icon="🧘">🧘</button>
+                        <button class="icon-option" data-icon="✍️">✍️</button>
+                        <button class="icon-option" data-icon="✨">✨</button>
+                        <button class="icon-option" data-icon="🔥">🔥</button>
+                        <button class="icon-option" data-icon="💪">💪</button>
+                        <button class="icon-option" data-icon="🎯">🎯</button>
+                        <button class="icon-option" data-icon="☕">☕</button>
+                        <button class="icon-option" data-icon="🎨">🎨</button>
+                        <button class="icon-option" data-icon="🎵">🎵</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Frequency:</label>
+                    <div class="frequency-options" style="display: flex; gap: var(--space-sm); margin-top: var(--space-sm);">
+                        <button type="button" class="frequency-btn active" data-frequency="daily">
+                            <span class="icon icon-xs">☀️</span>
+                            <span>Daily</span>
+                        </button>
+                        <button type="button" class="frequency-btn" data-frequency="weekly">
+                            <span class="icon icon-xs">📅</span>
+                            <span>Weekly</span>
+                        </button>
+                        <button type="button" class="frequency-btn" data-frequency="custom">
+                            <span class="icon icon-xs">⚙️</span>
+                            <span>Custom</span>
+                        </button>
+                    </div>
+                    <input type="number" id="editHabitFrequencyCount" class="input-field" placeholder="Times per week (1-7)" min="1" max="7" style="display:none; margin-top:0.75rem;">
+                </div>
+                <div class="form-group">
+                    <label>Category:</label>
+                    <div class="category-options" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-sm); margin-top: var(--space-sm);">
+                        <button type="button" class="category-btn active" data-category="">
+                            <span>No category</span>
+                        </button>
+                        <button type="button" class="category-btn" data-category="health">
+                            <span>💪 Health</span>
+                        </button>
+                        <button type="button" class="category-btn" data-category="productivity">
+                            <span>⚡ Productivity</span>
+                        </button>
+                        <button type="button" class="category-btn" data-category="learning">
+                            <span>📚 Learning</span>
+                        </button>
+                        <button type="button" class="category-btn" data-category="wellness">
+                            <span>🍃 Wellness</span>
+                        </button>
+                        <button type="button" class="category-btn" data-category="social">
+                            <span>👥 Social</span>
+                        </button>
+                        <button type="button" class="category-btn" data-category="creative">
+                            <span>🎨 Creative</span>
+                        </button>
+                    </div>
+                </div>
+                <button class="btn-primary" id="saveEditHabitBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Smart Reschedule Modal -->
+    <div class="modal" id="rescheduleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Reschedule Task</h3>
+                <button class="modal-close" id="closeRescheduleModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-subtitle">Smart suggestions based on your patterns:</p>
+                <div id="rescheduleSuggestions" class="suggestion-list">
+                    <!-- Suggestions will be added here -->
+                </div>
+                <div class="manual-reschedule">
+                    <h4>Or choose manually:</h4>
+                    <input type="date" id="manualDate" class="input-field">
+                    <input type="time" id="manualTime" class="input-field">
+                    <button class="btn-primary" id="manualRescheduleBtn">Reschedule</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Task Breakdown Modal -->
+    <div class="modal" id="breakdownModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Break Down Task</h3>
+                <button class="modal-close" id="closeBreakdownModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-subtitle">AI suggestions:</p>
+                <div id="breakdownSuggestions" class="suggestion-list">
+                    <!-- Suggestions will be added here -->
+                </div>
+                <button class="btn-secondary" id="useBreakdownSuggestions">Use These</button>
+                
+                <h4 style="margin-top: 1.5rem;">Or create custom subtasks:</h4>
+                <div id="customSubtasks">
+                    <input type="text" class="input-field subtask-input" placeholder="Subtask 1">
+                    <input type="text" class="input-field subtask-input" placeholder="Subtask 2">
+                    <input type="text" class="input-field subtask-input" placeholder="Subtask 3">
+                </div>
+                <button class="btn-add-subtask" id="addSubtaskInput">+ Add Another</button>
+                <button class="btn-primary" id="saveBreakdownBtn" style="margin-top: 1rem;">Save Breakdown</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Habit Insights Modal -->
+    <div class="modal" id="habitInsightsModal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3>Habit Insights</h3>
+                <button class="modal-close" id="closeInsightsModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="habitInsightsContent">
+                    <!-- Insights will be rendered here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Task Editor Sheet (Notion-Style) -->
+    <div class="task-editor-overlay" id="taskEditorOverlay"></div>
+    <div class="task-editor-sheet" id="taskEditorSheet">
+        <div class="task-editor-header">
+            <h3 id="taskEditorTitle">Edit Task</h3>
+            <button class="task-editor-close" id="closeTaskEditor">
+                <span class="icon icon-sm"></span>
+            </button>
+        </div>
+        <div class="task-editor-content">
+            <div class="editor-field">
+                <label class="editor-label">Title</label>
+                <input type="text" id="editorTitle" class="editor-input" placeholder="Task name...">
+            </div>
+            
+            <div class="editor-field">
+                <label class="editor-label">Description</label>
+                <textarea id="editorDescription" class="editor-input editor-textarea" placeholder="Add details..."></textarea>
+            </div>
+            
+            <div class="editor-field">
+                <label class="editor-label">Due Date & Time</label>
+                <div style="display: flex; gap: var(--space-sm);">
+                    <input type="date" id="editorDate" class="editor-input" style="flex: 1;">
+                    <input type="time" id="editorTime" class="editor-input" style="flex: 1;">
+                </div>
+            </div>
+            
+            <div class="editor-field">
+                <label class="editor-label">Priority</label>
+                <div style="display: flex; gap: var(--space-sm);">
+                    <button class="priority-btn" data-priority="high">
+                        <span class="icon icon-xs"></span> High
+                    </button>
+                    <button class="priority-btn" data-priority="medium">
+                        <span class="icon icon-xs"></span> Medium
+                    </button>
+                    <button class="priority-btn" data-priority="low">
+                        <span class="icon icon-xs"></span> Low
+                    </button>
+                </div>
+            </div>
+            
+            <div class="editor-field">
+                <label class="editor-label">Category</label>
+                <div class="category-tags">
+                    <button class="category-tag category-work" data-category="work">💼 Work</button>
+                    <button class="category-tag category-study" data-category="study">📚 Study</button>
+                    <button class="category-tag category-personal" data-category="personal">🏠 Personal</button>
+                    <button class="category-tag category-health" data-category="health">💪 Health</button>
+                    <button class="category-tag category-errands" data-category="errands">🛒 Errands</button>
+                    <button class="category-tag category-wellness" data-category="wellness">🍃 Wellness</button>
+                </div>
+            </div>
+            
+            <div class="editor-field">
+                <label class="editor-label">Time Estimate (minutes)</label>
+                <input type="number" id="editorDuration" class="editor-input" placeholder="30" min="5" max="480">
+            </div>
+            
+            <button class="btn-calm btn-calm-primary" id="saveTaskEditor" style="width: 100%; margin-top: var(--space-lg);">
+                Save Task
+            </button>
+        </div>
+    </div>
+
+    <!-- Theme Selector Modal -->
+    <div class="modal" id="themeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Choose Your Theme</h3>
+                <button class="modal-close" id="closeThemeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="theme-grid">
+                    <div class="theme-option theme-morning-sky" data-theme="morning-sky">
+                        <div class="theme-option-label">Morning Sky</div>
+                    </div>
+                    <div class="theme-option theme-mint-garden" data-theme="mint-garden">
+                        <div class="theme-option-label">Mint Garden</div>
+                    </div>
+                    <div class="theme-option theme-warm-sand" data-theme="warm-sand">
+                        <div class="theme-option-label">Warm Sand</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confetti Animation Container -->
+    <div id="confettiContainer"></div>
+
+    <!-- Bottom Sheet for Calendar Day View -->
+    <div class="bottom-sheet-overlay" id="bottomSheetOverlay"></div>
+    <div class="bottom-sheet" id="bottomSheet">
+        <div class="bottom-sheet-handle"></div>
+        <div class="bottom-sheet-header">
+            <h3 id="bottomSheetTitle">Day Details</h3>
+            <p class="subtitle" id="bottomSheetSubtitle"></p>
+        </div>
+        <div class="bottom-sheet-content" id="bottomSheetContent">
+            <!-- Content will be dynamically loaded -->
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/icons.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/api.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/utils.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/icons.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/search.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/undo-redo.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/focus-mode.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/gestures.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dragdrop.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/task-groups.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/templates.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/projects.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/activity-log.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/scheduling.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/offline.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/ios-shortcuts.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    
+    <!-- PWA Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/static/sw.js')
+                    .then(reg => console.log('Service Worker registered'))
+                    .catch(err => console.log('Service Worker registration failed'));
+            });
+        }
+    </script>
+</body>
+</html>
+
+

@@ -155,6 +155,54 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: var(--space-md);
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    flex: 1;
+    justify-content: flex-end;
+    max-width: 500px;
+}
+
+.header-settings-btn {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    transition: all 0.2s;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.header-settings-btn svg {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    stroke: white;
+}
+
+.header-settings-btn svg circle,
+.header-settings-btn svg path {
+    stroke: white;
+    stroke-width: 2.5;
+}
+
+.header-settings-btn:hover {
+    background: rgba(255, 255, 255, 0.35);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: scale(1.1);
+}
+
+.header-settings-btn:active {
+    transform: scale(0.95);
 }
 
 .app-logo {
@@ -186,18 +234,13 @@ body {
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Header stats removed - no longer displayed */
 .header-stats {
-    display: flex;
-    gap: 0.5rem;
+    display: none;
 }
 
 .stat-badge {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 500;
+    display: none;
 }
 
 /* Motivation Banner */
@@ -216,7 +259,7 @@ body {
     margin: 0;
     font-size: 0.95rem;
     font-weight: 500;
-    color: #A9C6FF;
+    color: #2C2C2C;
     animation: fadeIn 0.5s ease;
 }
 
@@ -270,6 +313,7 @@ body {
 .section-header h2 {
     font-size: 1.5rem;
     font-weight: 700;
+    color: #2C2C2C;
 }
 
 .progress-indicator {
@@ -366,8 +410,8 @@ body {
     height: 50px;
     border-radius: var(--radius-sm);
     border: none;
-    background: var(--primary-gradient);
-    color: white;
+    background: var(--theme-primary, var(--calm-primary));
+    color: white !important;
     font-size: 1.5rem;
     cursor: pointer;
     display: flex;
@@ -378,6 +422,7 @@ body {
 }
 
 .add-btn:hover {
+    background: var(--theme-primary-dark, var(--calm-primary-dark));
     transform: scale(1.05);
     box-shadow: var(--shadow-lg);
 }
@@ -388,6 +433,54 @@ body {
 
 /* Tasks List */
 .tasks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+/* Completed Tasks Section */
+.completed-tasks-section {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid var(--border-color);
+}
+
+.completed-tasks-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 0 0.5rem;
+}
+
+.completed-tasks-header h3 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary, #8C8C91);
+    margin: 0;
+}
+
+.collapse-completed-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-secondary, #8C8C91);
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.collapse-completed-btn:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+.completed-tasks-list {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
@@ -796,8 +889,8 @@ body {
 
 /* Buttons */
 .btn-primary {
-    background: var(--primary-gradient);
-    color: white;
+    background: var(--theme-primary, var(--calm-primary)) !important;
+    color: white !important;
     border: none;
     border-radius: var(--radius-sm);
     padding: 1rem 2rem;
@@ -810,6 +903,8 @@ body {
 }
 
 .btn-primary:hover {
+    background: var(--theme-primary-dark, var(--calm-primary-dark)) !important;
+    color: white !important;
     transform: translateY(-2px);
     box-shadow: var(--shadow-lg);
 }
@@ -819,8 +914,8 @@ body {
 }
 
 .btn-icon {
-    background: var(--primary-gradient);
-    color: white;
+    background: var(--theme-primary, var(--calm-primary));
+    color: white !important;
     border: none;
     border-radius: 50%;
     width: 40px;
@@ -830,11 +925,17 @@ body {
     justify-content: center;
     cursor: pointer;
     font-size: 1.25rem;
+    font-weight: 600;
     box-shadow: var(--shadow-md);
     transition: all 0.2s;
 }
 
+.btn-icon * {
+    color: white !important;
+}
+
 .btn-icon:hover {
+    background: var(--theme-primary-dark, var(--calm-primary-dark));
     transform: scale(1.1);
 }
 
@@ -1363,19 +1464,27 @@ body {
     cursor: pointer;
     font-size: 0.875rem;
     transition: all 0.2s;
+    color: var(--text-primary, #2C2C2C) !important;
+    font-weight: 500;
+}
+
+.view-btn:not(.active):hover {
+    color: var(--theme-primary, var(--calm-primary));
+    border-color: var(--theme-primary, var(--calm-primary));
 }
 
 .view-btn.active {
-    background: var(--primary-gradient);
-    color: white;
-    border-color: #A9C6FF;
+    background: var(--theme-primary, var(--calm-primary));
+    color: white !important;
+    border-color: var(--theme-primary, var(--calm-primary));
+    font-weight: 600;
 }
 
 .calendar-nav-btn {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--theme-primary, var(--calm-primary));
     background: white;
     cursor: pointer;
     font-size: 1.25rem;
@@ -1383,10 +1492,13 @@ body {
     align-items: center;
     justify-content: center;
     transition: all 0.2s;
+    color: var(--theme-primary, var(--calm-primary));
 }
 
 .calendar-nav-btn:hover {
-    background: var(--bg-secondary);
+    background: var(--theme-primary-light, var(--calm-primary-light));
+    border-color: var(--theme-primary, var(--calm-primary));
+    color: var(--theme-primary, var(--calm-primary));
     transform: scale(1.1);
 }
 
@@ -1394,17 +1506,17 @@ body {
     width: 100%;
     padding: 0.75rem;
     margin-bottom: 1rem;
-    background: white;
-    border: 2px solid var(--primary-gradient);
+    background: var(--theme-primary, var(--calm-primary));
+    border: 2px solid var(--theme-primary, var(--calm-primary));
     border-radius: var(--radius-sm);
-    color: #A9C6FF;
+    color: white !important;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
 }
 
 .btn-today:hover {
-    background: var(--primary-gradient);
+    background: var(--theme-primary-dark, var(--calm-primary-dark));
     color: white;
 }
 
@@ -1420,6 +1532,35 @@ body {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+}
+
+/* Affirmation Message Box */
+.affirmation-message,
+.affirmation-box,
+.day-affirmation {
+    background: #138c13;
+    border-radius: var(--radius-md);
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    color: white;
+    font-weight: 600;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* Note: Keep #138c13 for affirmation boxes as specifically requested */
+
+/* Smart Suggestions Apply Button - Use theme color */
+.suggestion-action-btn {
+    background: var(--theme-primary, var(--calm-primary)) !important;
+    color: white !important;
+    font-weight: 600;
+}
+
+.suggestion-action-btn:hover {
+    background: var(--theme-primary-dark, var(--calm-primary-dark)) !important;
+    color: white !important;
 }
 
 .day-section {
@@ -1482,8 +1623,8 @@ body {
 }
 
 .week-day.today {
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-    border: 2px solid #A9C6FF;
+    background: var(--theme-primary-light, var(--calm-primary-light));
+    border: 2px solid var(--theme-primary, var(--calm-primary));
 }
 
 .week-task-count,
@@ -1520,7 +1661,7 @@ body {
 }
 
 .month-day.today {
-    background: var(--primary-gradient);
+    background: var(--theme-primary, var(--calm-primary));
     color: white;
 }
 
@@ -1663,8 +1804,8 @@ body {
 
 .btn-secondary {
     background: white;
-    color: #A9C6FF;
-    border: 2px solid #A9C6FF;
+    color: var(--theme-primary, #A9C6FF) !important;
+    border: 2px solid var(--calm-line, #E5E7EB) !important;
     border-radius: var(--radius-sm);
     padding: 1rem 2rem;
     font-size: 1rem;
@@ -1675,8 +1816,9 @@ body {
 }
 
 .btn-secondary:hover {
-    background: #A9C6FF;
-    color: white;
+    background: var(--theme-primary-light, var(--calm-primary-light)) !important;
+    color: var(--calm-text-1) !important;
+    border-color: var(--theme-primary, var(--calm-primary)) !important;
 }
 
 /* Habit Insights */

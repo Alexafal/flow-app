@@ -1,0 +1,509 @@
+/* Spacing Optimization - Less Cramped, More Breathing Room */
+
+/* ============================================
+   FLOATING NAVIGATION - More Spacing
+   ============================================ */
+
+.floating-nav {
+    padding: var(--space-md, 1rem) var(--space-lg, 1.5rem) !important;
+    gap: var(--space-sm, 0.75rem) !important;
+    bottom: var(--space-xl, 1.5rem) !important;
+}
+
+.nav-item {
+    padding: var(--space-md, 1rem) var(--space-lg, 1.25rem) !important;
+    min-width: 70px !important;
+    gap: var(--space-xs, 0.5rem) !important;
+}
+
+.nav-item .icon {
+    width: 22px !important;
+    height: 22px !important;
+}
+
+.nav-label {
+    font-size: 0.75rem !important;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+/* ============================================
+   HEADER - Better Spacing for Search & Settings
+   ============================================ */
+
+.header-content {
+    gap: var(--space-lg, 1.5rem) !important;
+    padding: 0 var(--space-sm, 0.75rem);
+}
+
+.header-actions {
+    gap: var(--space-md, 1rem) !important;
+    max-width: 550px;
+}
+
+.global-search-bar {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin-right: 0 !important;
+}
+
+.search-input-wrapper {
+    padding: 0.75rem 1rem;
+    gap: var(--space-sm, 0.75rem);
+}
+
+.search-input {
+    padding: 0.5rem 0;
+    font-size: 0.9375rem;
+}
+
+.header-settings-btn {
+    width: 44px !important;
+    height: 44px !important;
+    margin-left: var(--space-xs, 0.5rem);
+}
+
+/* ============================================
+   SECTION HEADERS - More Breathing Room
+   ============================================ */
+
+.section-header {
+    margin-bottom: var(--space-xl, 1.5rem) !important;
+    padding: 0 var(--space-sm, 0.75rem);
+    gap: var(--space-md, 1rem);
+}
+
+.section-header h2 {
+    margin-bottom: 0;
+    letter-spacing: -0.01em;
+}
+
+.section-header > div {
+    gap: var(--space-md, 1rem);
+}
+
+/* ============================================
+   BUTTONS - Better Touch Targets & Spacing
+   ============================================ */
+
+.btn-primary,
+.btn-secondary {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    min-height: 48px;
+}
+
+.btn-icon {
+    padding: 0.875rem !important;
+    min-width: 48px !important;
+    min-height: 48px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.add-btn {
+    padding: 0.875rem 1.25rem;
+    min-height: 48px;
+    font-weight: 600;
+}
+
+.view-btn {
+    padding: 0.75rem 1.25rem;
+    min-height: 44px;
+    font-weight: 500;
+    gap: var(--space-xs, 0.5rem);
+}
+
+.btn-today {
+    padding: 0.75rem 1.5rem;
+    min-height: 44px;
+    font-weight: 600;
+}
+
+/* ============================================
+   TASK INPUT CONTAINER
+   ============================================ */
+
+.task-input-container {
+    padding: var(--space-lg, 1.5rem) !important;
+    gap: var(--space-md, 1rem) !important;
+}
+
+.task-input {
+    padding: 1rem 1.25rem;
+    font-size: 1rem;
+    min-height: 52px;
+    border-radius: var(--radius-md, 12px);
+}
+
+#addTaskBtn {
+    min-width: 52px;
+    min-height: 52px;
+    border-radius: var(--radius-md, 12px);
+}
+
+/* ============================================
+   CARDS & CONTAINERS - More Padding
+   ============================================ */
+
+.task-item,
+.habit-item,
+.alltask-item {
+    padding: var(--space-lg, 1.5rem) !important;
+    margin-bottom: var(--space-md, 1rem) !important;
+    border-radius: var(--radius-lg, 16px);
+}
+
+.card,
+.stat-card {
+    padding: var(--space-xl, 1.5rem) !important;
+    margin-bottom: var(--space-lg, 1.5rem) !important;
+    border-radius: var(--radius-lg, 16px);
+}
+
+/* ============================================
+   FILTER PILLS - More Spacing
+   ============================================ */
+
+.alltasks-controls {
+    gap: var(--space-lg, 1.5rem) !important;
+    margin-bottom: var(--space-xl, 2rem) !important;
+    padding: 0 var(--space-sm, 0.75rem);
+}
+
+.filter-group {
+    margin-bottom: var(--space-sm, 0.75rem);
+}
+
+.filter-label {
+    margin-bottom: var(--space-sm, 0.75rem);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.filter-pills {
+    gap: var(--space-sm, 0.75rem) !important;
+}
+
+.filter-pill {
+    padding: 0.75rem 1.25rem !important;
+    font-size: 0.875rem;
+    font-weight: 500;
+    min-height: 40px;
+    border-radius: var(--radius-pill, 999px);
+}
+
+/* ============================================
+   SORT CONTROLS (As Filter Group)
+   ============================================ */
+
+.alltasks-controls .filter-group .sort-control-wrapper {
+    margin: 0;
+    width: 100%;
+}
+
+.sort-control-wrapper {
+    margin: 0;
+}
+
+.sort-dropdown-btn {
+    padding: 0.75rem 1.25rem !important;
+    font-size: 0.875rem;
+    min-height: 40px;
+    gap: var(--space-sm, 0.75rem);
+    border-radius: var(--radius-md, 12px);
+}
+
+.sort-dropdown-menu {
+    margin-top: var(--space-xs, 0.5rem);
+    border-radius: var(--radius-lg, 16px);
+    overflow: hidden;
+}
+
+.sort-option {
+    padding: 0.875rem 1.25rem;
+    font-size: 0.875rem;
+}
+
+/* ============================================
+   CALENDAR CONTROLS
+   ============================================ */
+
+.calendar-header {
+    padding: var(--space-lg, 1.5rem);
+    gap: var(--space-md, 1rem);
+    margin-bottom: var(--space-lg, 1.5rem);
+}
+
+.calendar-title h2 {
+    margin-bottom: var(--space-md, 1rem);
+}
+
+.view-switcher {
+    gap: var(--space-sm, 0.75rem);
+}
+
+.calendar-nav-btn {
+    padding: 0.75rem;
+    min-width: 44px;
+    min-height: 44px;
+}
+
+.btn-today {
+    margin: var(--space-lg, 1.5rem) auto;
+    display: block;
+}
+
+/* ============================================
+   DAY VIEW (Calendar)
+   ============================================ */
+
+.day-view {
+    padding: var(--space-lg, 1.5rem);
+}
+
+.day-section {
+    margin-bottom: var(--space-xl, 2rem);
+}
+
+.day-section h3 {
+    margin-bottom: var(--space-md, 1rem);
+    padding-bottom: var(--space-sm, 0.75rem);
+    border-bottom: 2px solid var(--border-color, #E4E4E6);
+}
+
+.calendar-task-item,
+.calendar-habit-item {
+    padding: var(--space-md, 1rem);
+    margin-bottom: var(--space-sm, 0.75rem);
+    border-radius: var(--radius-md, 12px);
+}
+
+/* ============================================
+   MODALS - More Breathing Room
+   ============================================ */
+
+.modal-content {
+    padding: var(--space-xl, 2rem) !important;
+    border-radius: var(--radius-lg, 20px);
+}
+
+.modal-header {
+    margin-bottom: var(--space-xl, 2rem);
+    padding-bottom: var(--space-lg, 1.5rem);
+    border-bottom: 2px solid var(--border-color, #E4E4E6);
+}
+
+.modal-header h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.modal-body {
+    padding: var(--space-lg, 1.5rem) 0;
+}
+
+/* ============================================
+   HABITS GRID
+   ============================================ */
+
+.habits-grid {
+    gap: var(--space-lg, 1.5rem) !important;
+}
+
+.habit-item {
+    padding: var(--space-xl, 1.5rem) !important;
+}
+
+/* ============================================
+   SMART SUGGESTIONS
+   ============================================ */
+
+.smart-suggestions-panel {
+    margin: var(--space-lg, 1.5rem);
+    padding: var(--space-xl, 1.5rem);
+    border-radius: var(--radius-lg, 16px);
+}
+
+.suggestions-header {
+    margin-bottom: var(--space-lg, 1.5rem);
+    padding-bottom: var(--space-md, 1rem);
+    border-bottom: 1px solid var(--border-color, #E4E4E6);
+}
+
+.suggestions-header h3 {
+    font-size: 1.125rem;
+    font-weight: 700;
+}
+
+/* ============================================
+   MOTIVATION BANNER
+   ============================================ */
+
+.motivation-banner {
+    margin: var(--space-lg, 1.5rem);
+    padding: var(--space-xl, 1.5rem);
+    border-radius: var(--radius-lg, 16px);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+}
+
+/* ============================================
+   COMPLETED TASKS SECTION
+   ============================================ */
+
+.completed-tasks-section {
+    margin-top: var(--space-xl, 2rem);
+    padding-top: var(--space-lg, 1.5rem);
+}
+
+.completed-tasks-header {
+    padding: 0 var(--space-sm, 0.75rem);
+    margin-bottom: var(--space-md, 1rem);
+}
+
+.completed-tasks-header h3 {
+    font-size: 0.8125rem;
+}
+
+.collapse-completed-btn {
+    padding: 0.5rem 0.75rem;
+    min-width: 44px;
+    min-height: 44px;
+}
+
+/* ============================================
+   FREQUENCY & CATEGORY BUTTONS
+   ============================================ */
+
+.frequency-btn,
+.category-btn {
+    padding: 1rem 1.5rem !important;
+    font-size: 0.9375rem;
+    min-height: 48px;
+    gap: var(--space-sm, 0.75rem);
+}
+
+/* ============================================
+   MAIN CONTENT SPACING
+   ============================================ */
+
+.main-content {
+    padding: var(--space-lg, 1.5rem) var(--space-md, 1rem);
+    padding-bottom: 140px; /* Extra space for nav */
+}
+
+.tab-content {
+    max-width: 100%;
+}
+
+/* ============================================
+   BETTER LINE HEIGHTS & TYPOGRAPHY
+   ============================================ */
+
+.task-item .task-title,
+.alltask-title {
+    line-height: 1.5;
+    margin-bottom: var(--space-xs, 0.5rem);
+}
+
+.alltask-description {
+    line-height: 1.6;
+    margin-top: var(--space-xs, 0.5rem);
+}
+
+/* ============================================
+   ACTION BUTTONS IN TASKS
+   ============================================ */
+
+.alltask-actions {
+    gap: var(--space-sm, 0.75rem);
+    margin-top: var(--space-md, 1rem);
+}
+
+.alltask-action-btn {
+    padding: 0.625rem 1rem;
+    font-size: 0.8125rem;
+    border-radius: var(--radius-sm, 8px);
+}
+
+/* ============================================
+   IMPROVED VISUAL HIERARCHY
+   ============================================ */
+
+.alltasks-header {
+    margin-bottom: var(--space-xl, 2rem);
+    padding: 0 var(--space-sm, 0.75rem);
+}
+
+.alltasks-header h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: var(--space-lg, 1.5rem);
+    letter-spacing: -0.02em;
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS (Keep Mobile Optimized)
+   ============================================ */
+
+@media (max-width: 768px) {
+    .floating-nav {
+        padding: var(--space-md, 1rem) var(--space-lg, 1.25rem) !important;
+        gap: var(--space-xs, 0.5rem) !important;
+        bottom: var(--space-lg, 1.5rem) !important;
+    }
+    
+    .nav-item {
+        padding: var(--space-sm, 0.75rem) var(--space-md, 1rem) !important;
+        min-width: 60px !important;
+    }
+    
+    .header-actions {
+        gap: var(--space-sm, 0.75rem) !important;
+    }
+    
+    .section-header {
+        margin-bottom: var(--space-lg, 1.5rem) !important;
+    }
+    
+    .alltasks-controls {
+        gap: var(--space-md, 1rem) !important;
+    }
+    
+    .filter-pills {
+        gap: var(--space-xs, 0.5rem) !important;
+    }
+}
+
+@media (max-width: 428px) {
+    .floating-nav {
+        padding: var(--space-sm, 0.75rem) var(--space-md, 1rem) !important;
+        gap: var(--space-xs, 0.5rem) !important;
+    }
+    
+    .nav-item {
+        padding: var(--space-sm, 0.75rem) var(--space-xs, 0.5rem) !important;
+        min-width: 50px !important;
+    }
+    
+    .header-content {
+        gap: var(--space-sm, 0.75rem) !important;
+    }
+    
+    .task-item,
+    .habit-item,
+    .alltask-item {
+        padding: var(--space-md, 1rem) !important;
+    }
+    
+    .main-content {
+        padding: var(--space-md, 1rem) var(--space-sm, 0.75rem);
+        padding-bottom: 120px;
+    }
+}

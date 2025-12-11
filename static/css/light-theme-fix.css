@@ -1,0 +1,169 @@
+/* Light Theme Fix - Revert Dark Backgrounds to Light */
+
+/* ============================================
+   CALENDAR DAYS - Light Background
+   ============================================ */
+
+.month-day {
+    background: white !important;
+    color: var(--text-primary, #4F4F55) !important;
+    border: 1px solid var(--border-color, #E4E4E6) !important;
+}
+
+.month-day:hover {
+    background: var(--bg-secondary, #F6F6F7) !important;
+    color: var(--text-primary, #4F4F55) !important;
+}
+
+.month-day.today {
+    background: var(--theme-primary, var(--calm-primary, #A9C6FF)) !important;
+    color: white !important;
+    border-color: var(--theme-primary, var(--calm-primary, #A9C6FF)) !important;
+}
+
+.month-day-number {
+    color: inherit !important;
+}
+
+.week-day {
+    background: white !important;
+    color: var(--text-primary, #4F4F55) !important;
+    border: 1px solid var(--border-color, #E4E4E6) !important;
+}
+
+.week-day.today {
+    background: var(--theme-primary-light, rgba(169, 198, 255, 0.15)) !important;
+    color: var(--text-primary, #4F4F55) !important;
+    border: 2px solid var(--theme-primary, var(--calm-primary, #A9C6FF)) !important;
+}
+
+.week-day-header {
+    color: var(--text-primary, #4F4F55) !important;
+}
+
+.week-task-count,
+.week-habit-count {
+    color: var(--text-secondary, #8C8C91) !important;
+}
+
+/* ============================================
+   VIEW BUTTONS - Light Background
+   ============================================ */
+
+.view-btn:not(.active) {
+    background: white !important;
+    color: var(--text-primary, #4F4F55) !important;
+    border: 1px solid var(--border-color, #E4E4E6) !important;
+}
+
+.view-btn.active {
+    background: var(--theme-primary, var(--calm-primary, #A9C6FF)) !important;
+    color: white !important;
+    border-color: var(--theme-primary, var(--calm-primary, #A9C6FF)) !important;
+}
+
+/* ============================================
+   ANALYTICS & STATS - Light Background
+   ============================================ */
+
+.analytics-metric {
+    background: white !important;
+    border: 1px solid var(--border-color, #E4E4E6) !important;
+    border-radius: var(--radius-sm, 10px) !important;
+    padding: 1rem !important;
+    margin-bottom: 0.75rem !important;
+}
+
+.analytics-label {
+    color: var(--text-secondary, #8C8C91) !important;
+    font-size: 0.875rem !important;
+}
+
+.analytics-value {
+    color: var(--text-primary, #4F4F55) !important;
+    font-weight: 600 !important;
+}
+
+.insight-stat-card {
+    background: white !important;
+    border: 1px solid var(--border-color, #E4E4E6) !important;
+    color: var(--text-primary, #4F4F55) !important;
+}
+
+.insight-stat-value {
+    color: var(--theme-primary, var(--calm-primary, #A9C6FF)) !important;
+    -webkit-text-fill-color: var(--theme-primary, var(--calm-primary, #A9C6FF)) !important;
+    background: none !important;
+}
+
+.insight-stat-label {
+    color: var(--text-secondary, #8C8C91) !important;
+}
+
+/* ============================================
+   HOUR BADGES - Light Style
+   ============================================ */
+
+.hour-badge {
+    background: var(--theme-primary-light, rgba(169, 198, 255, 0.15)) !important;
+    color: var(--theme-primary, var(--calm-primary, #A9C6FF)) !important;
+    border: 1px solid var(--theme-primary-light, rgba(169, 198, 255, 0.3)) !important;
+    padding: 0.5rem 1rem !important;
+    border-radius: var(--radius-sm, 10px) !important;
+    font-weight: 500 !important;
+}
+
+/* ============================================
+   CARDS & CONTAINERS - Ensure Light
+   ============================================ */
+
+.stat-card,
+.card,
+.insight-card,
+.achievement-badge {
+    background: white !important;
+    color: var(--text-primary, #4F4F55) !important;
+}
+
+.insight-card {
+    border: 1px solid var(--border-color, #E4E4E6) !important;
+}
+
+/* ============================================
+   TEXT CONTRAST FIXES
+   ============================================ */
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary, #4F4F55) !important;
+}
+
+.section-header h2,
+.alltasks-header h2 {
+    color: var(--text-primary, #4F4F55) !important;
+}
+
+/* ============================================
+   OVERRIDE ANY DARK THEME
+   ============================================ */
+
+body:not(.night-theme) .month-day,
+body:not(.night-theme) .week-day,
+body:not(.night-theme) .analytics-metric,
+body:not(.night-theme) .insight-stat-card {
+    background: white !important;
+    color: var(--text-primary, #4F4F55) !important;
+}
+
+/* Ensure light theme variables are used */
+:root {
+    --bg-secondary: #F6F6F7 !important;
+    --text-primary: #4F4F55 !important;
+    --text-secondary: #8C8C91 !important;
+    --border-color: #E4E4E6 !important;
+}
+
+body:not(.night-theme) {
+    --bg-secondary: #F6F6F7 !important;
+    --text-primary: #4F4F55 !important;
+    --text-secondary: #8C8C91 !important;
+}

@@ -273,22 +273,23 @@ input[type="time"]::-webkit-calendar-picker-indicator:hover {
     align-items: center;
     justify-content: center;
     gap: var(--space-xs);
-    color: var(--text-primary);
+    color: #2C2C2C !important;
 }
 
 .frequency-btn:hover,
 .category-btn:hover {
-    border-color: var(--calm-primary);
+    border-color: var(--theme-primary, var(--calm-primary));
     background: rgba(169, 198, 255, 0.05);
     transform: translateY(-2px);
     box-shadow: var(--shadow-soft);
+    color: #2C2C2C !important;
 }
 
 .frequency-btn.active,
 .category-btn.active {
-    background: var(--calm-primary);
-    border-color: var(--calm-primary);
-    color: white;
+    background: var(--theme-primary, var(--calm-primary));
+    border-color: var(--theme-primary, var(--calm-primary));
+    color: white !important;
     box-shadow: 0 0 0 3px rgba(169, 198, 255, 0.2);
 }
 
@@ -516,11 +517,26 @@ input[type="time"]::-webkit-calendar-picker-indicator:hover {
     border-radius: var(--radius-pill);
     margin: var(--space-md) auto var(--space-sm);
     cursor: grab;
+    user-select: none;
+    touch-action: none;
+    flex-shrink: 0;
+}
+
+.bottom-sheet-handle:active {
+    cursor: grabbing;
 }
 
 .bottom-sheet-header {
     padding: 0 var(--space-lg) var(--space-md);
     border-bottom: 1px solid var(--border-color);
+    cursor: grab;
+    user-select: none;
+    touch-action: none;
+    flex-shrink: 0;
+}
+
+.bottom-sheet-header:active {
+    cursor: grabbing;
 }
 
 .bottom-sheet-header h3 {
@@ -652,7 +668,7 @@ input[type="time"]::-webkit-calendar-picker-indicator:hover {
     width: 56px;
     height: 56px;
     border-radius: var(--radius-md);
-    background: var(--habit-color, #A9C6FF);
+    background: #A9C6FF;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -933,7 +949,8 @@ body.night-theme {
 .suggestion-message {
     font-size: 0.9rem;
     line-height: 1.5;
-    color: var(--text-primary);
+    color: #2C2C2C;
+    font-weight: 500;
     margin-bottom: var(--space-xs);
 }
 
@@ -948,8 +965,9 @@ body.night-theme {
 }
 
 .suggestion-priority.high {
-    background: rgba(239, 68, 68, 0.1);
-    color: #ef4444;
+    background: rgba(239, 68, 68, 0.15);
+    color: #c0392b;
+    font-weight: 700;
 }
 
 .suggestion-priority.medium {
@@ -959,7 +977,7 @@ body.night-theme {
 
 .suggestion-action-btn {
     padding: 0.5rem 1rem;
-    background: var(--primary-gradient);
+    background: var(--theme-primary, var(--calm-primary));
     color: white;
     border: none;
     border-radius: var(--radius-sm);
@@ -971,6 +989,8 @@ body.night-theme {
 }
 
 .suggestion-action-btn:hover {
+    background: var(--theme-primary-dark, var(--calm-primary-dark));
+    color: white;
     transform: scale(1.05);
 }
 
@@ -1266,6 +1286,29 @@ body.night-theme {
     
     .mood-options {
         flex-wrap: wrap;
+    }
+}
+
+/* Template notification animations */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
     }
 }
 

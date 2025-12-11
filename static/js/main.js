@@ -31,6 +31,10 @@ class FlowApp {
         // Initialize icon system
         this.initializeIcons();
         
+        // Load saved theme
+        const savedTheme = localStorage.getItem('selected_theme') || 'calm';
+        this.setUserTheme(savedTheme);
+        
         // Check onboarding status
         const onboardingStatus = await api.getOnboardingStatus();
         
@@ -44,6 +48,94 @@ class FlowApp {
         this.setupEventListeners();
         this.setupSwipeGestures();
         this.setupBottomSheet();
+        this.initSortControls();
+        
+        // Check auth status on load
+        this.checkAuthAndOnboarding();
+    }
+    
+    toggleMoreMenu() {
+        const menu = document.getElementById('navMoreMenu');
+        const overlay = document.getElementById('navOverlay');
+        if (menu && overlay) {
+            const isActive = menu.classList.contains('active');
+            if (isActive) {
+                this.closeMoreMenu();
+            } else {
+                menu.classList.add('active');
+                overlay.classList.add('active');
+                // Update active state in menu
+                this.updateMoreMenuActiveState();
+            }
+        }
+    }
+    
+    closeMoreMenu() {
+        const menu = document.getElementById('navMoreMenu');
+        const overlay = document.getElementById('navOverlay');
+        if (menu) menu.classList.remove('active');
+        if (overlay) overlay.classList.remove('active');
+    }
+    
+    updateMoreMenuActiveState() {
+        const menuItems = document.querySelectorAll('.more-menu-item');
+        menuItems.forEach(item => {
+            const tab = item.dataset.tab;
+            if (tab === this.currentTab) {
+                item.classList.add('active');
+            } else {
+                item.classList.remove('active');
+            }
+        });
+    }
+    
+    initSortControls() {
+        // Initialize sort controls for Today page
+        const todaySortContainer = document.getElementById('sortControlToday');
+        if (todaySortContainer && window.taskSorter) {
+            const currentSort = window.taskSorter.getDefaultSort('today');
+            const dropdown = window.taskSorter.createSortDropdown('today', currentSort);
+            todaySortContainer.innerHTML = '';
+            todaySortContainer.appendChild(dropdown);
+        }
+        
+        // Initialize sort controls for All Tasks page
+        const allTasksSortContainer = document.getElementById('sortControlAllTasks');
+        if (allTasksSortContainer && window.taskSorter) {
+            const currentSort = window.taskSorter.getDefaultSort('alltasks');
+            const dropdown = window.taskSorter.createSortDropdown('alltasks', currentSort);
+            allTasksSortContainer.innerHTML = '';
+            allTasksSortContainer.appendChild(dropdown);
+        }
+        
+        // Listen for sort changes
+        window.addEventListener('sortChanged', (e) => {
+            const { page, sort } = e.detail;
+            if (page === 'today') {
+                this.renderTasks();
+            } else if (page === 'alltasks') {
+                this.renderAllTasks();
+            } else if (page === 'calendar') {
+                this.renderCalendar();
+            }
+        });
+    }
+
+    async checkAuthAndOnboarding() {
+        // Check if user is authenticated
+        const token = localStorage.getItem('auth_token');
+        if (!token) {
+            // No token, show login
+            if (window.AuthSystem && window.flowApp?.auth) {
+                window.flowApp.auth.showLoginScreen();
+            } else {
+                // No auth system, check onboarding
+                this.checkOnboarding();
+            }
+        } else {
+            // Has token, check onboarding
+            this.checkOnboarding();
+        }
     }
 
     initializeIcons() {
@@ -51,6 +143,16 @@ class FlowApp {
         const logoIcon = document.getElementById('app-logo-icon');
         if (logoIcon) {
             logoIcon.innerHTML = FlowIcons.logoMark;
+        }
+
+        // Initialize header settings icon with custom design - improved contrast
+        const headerSettingsIcon = document.getElementById('icon-settings-header');
+        if (headerSettingsIcon) {
+            // Custom settings gear icon with better visibility
+            headerSettingsIcon.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M12 1v6m0 6v6M5.64 5.64l4.24 4.24m4.24 4.24l4.24 4.24M1 12h6m6 0h6M5.64 18.36l4.24-4.24m4.24-4.24l4.24-4.24"></path>
+            </svg>`;
         }
         
         // Initialize navigation icons
@@ -68,6 +170,11 @@ class FlowApp {
             const element = document.getElementById(id);
             if (element) {
                 element.innerHTML = FlowIcons[iconName];
+            }
+            // Also initialize menu icons
+            const menuElement = document.getElementById(id + '-menu');
+            if (menuElement) {
+                menuElement.innerHTML = FlowIcons[iconName];
             }
         });
         
@@ -308,6 +415,71 @@ class FlowApp {
         }
     }
 
+    setUserTheme(theme) {
+        // Apply theme to document
+        document.documentElement.setAttribute('data-theme', theme);
+        document.body.setAttribute('data-theme', theme);
+        
+        // Save to localStorage
+        localStorage.setItem('selected_theme', theme);
+        
+        // Update all theme buttons
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.theme === theme);
+        });
+        
+        // Show notification
+        if (window.utils) {
+            window.utils.showToast(`Theme changed to ${theme.charAt(0).toUpperCase() + theme.slice(1)}`);
+        }
+    }
+
+    renderSettings() {
+        // Update user email
+        const userEmail = document.getElementById('userEmail');
+        if (userEmail && window.flowApp?.auth?.currentUser) {
+            userEmail.textContent = window.flowApp.auth.currentUser.email || 'user@example.com';
+        }
+
+        // Load notification settings
+        const notificationsEnabled = document.getElementById('notificationsEnabled');
+        const quietHoursStart = document.getElementById('quietHoursStart');
+        const quietHoursEnd = document.getElementById('quietHoursEnd');
+        
+        if (notificationsEnabled) {
+            const saved = localStorage.getItem('notifications_enabled');
+            notificationsEnabled.checked = saved !== 'false';
+        }
+
+        if (quietHoursStart && quietHoursEnd) {
+            const saved = localStorage.getItem('quiet_hours');
+            if (saved) {
+                const hours = JSON.parse(saved);
+                quietHoursStart.value = `${String(hours.start).padStart(2, '0')}:00`;
+                quietHoursEnd.value = `${String(hours.end).padStart(2, '0')}:00`;
+            }
+        }
+
+        // Load calendar sync status
+        const calendarStatus = document.getElementById('calendarSyncStatus');
+        if (calendarStatus && window.flowApp?.calendarSync) {
+            calendarStatus.textContent = window.flowApp.calendarSync.isConnected ? 'Connected' : 'Not connected';
+        }
+
+        // Load theme
+        const savedTheme = localStorage.getItem('selected_theme') || 'calm';
+        this.setUserTheme(savedTheme);
+
+        // Load high contrast
+        const highContrast = document.getElementById('highContrastEnabled');
+        if (highContrast) {
+            highContrast.checked = localStorage.getItem('high_contrast') === 'true';
+            if (highContrast.checked) {
+                document.body.classList.add('high-contrast-mode');
+            }
+        }
+    }
+
     async updatePraise() {
         try {
             const praise = await api.getPraise();
@@ -422,7 +594,40 @@ class FlowApp {
             btn.addEventListener('click', (e) => {
                 const tab = e.currentTarget.dataset.tab;
                 this.switchTab(tab);
+                // Close more menu if open
+                this.closeMoreMenu();
             });
+        });
+        
+        // More menu items
+        document.querySelectorAll('.more-menu-item').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const tab = e.currentTarget.dataset.tab;
+                this.switchTab(tab);
+                this.closeMoreMenu();
+            });
+        });
+        
+        // More button toggle
+        const navMoreBtn = document.getElementById('navMoreBtn');
+        const navMoreMenu = document.getElementById('navMoreMenu');
+        const navOverlay = document.getElementById('navOverlay');
+        
+        if (navMoreBtn && navMoreMenu) {
+            navMoreBtn.addEventListener('click', () => {
+                this.toggleMoreMenu();
+            });
+            
+            if (navOverlay) {
+                navOverlay.addEventListener('click', () => {
+                    this.closeMoreMenu();
+                });
+            }
+        }
+
+        // Header settings button
+        document.getElementById('headerSettingsBtn')?.addEventListener('click', () => {
+            this.switchTab('settings');
         });
 
         // Add task
@@ -460,6 +665,31 @@ class FlowApp {
         document.getElementById('saveEditHabitBtn')?.addEventListener('click', () => {
             this.handleSaveEditHabit();
         });
+
+        // Batch 6: Focus Mode Button
+        document.getElementById('focusModeBtn')?.addEventListener('click', () => {
+            if (this.focusMode) {
+                this.focusMode.open();
+            }
+        });
+
+        // Batch 6: Schedule Today Button
+        document.getElementById('scheduleTodayBtn')?.addEventListener('click', async () => {
+            if (this.scheduling) {
+                const schedule = await this.scheduling.suggestSchedule();
+                this.showScheduleModal(schedule);
+            }
+        });
+
+        // Batch 6: Templates
+        document.getElementById('showTemplatesBtn')?.addEventListener('click', () => {
+            this.showTemplatesModal();
+        });
+
+        document.getElementById('closeTemplatesModal')?.addEventListener('click', () => {
+            document.getElementById('templatesModal').style.display = 'none';
+        });
+
 
         // Edit habit icon selection
         document.querySelectorAll('#editHabitIconOptions .icon-option').forEach(btn => {
@@ -545,6 +775,94 @@ class FlowApp {
         document.getElementById('goToToday')?.addEventListener('click', () => {
             this.currentDate = new Date();
             this.renderCalendar();
+        });
+
+        // Settings event listeners
+        document.getElementById('notificationsEnabled')?.addEventListener('change', (e) => {
+            localStorage.setItem('notifications_enabled', e.target.checked);
+            if (window.flowApp?.notifications) {
+                // Update notifications system
+            }
+        });
+
+        document.getElementById('quietHoursStart')?.addEventListener('change', (e) => {
+            const start = parseInt(e.target.value.split(':')[0]);
+            const end = parseInt(document.getElementById('quietHoursEnd').value.split(':')[0]);
+            localStorage.setItem('quiet_hours', JSON.stringify({ start, end }));
+            if (window.flowApp?.notifications) {
+                window.flowApp.notifications.setQuietHours(start, end);
+            }
+        });
+
+        document.getElementById('quietHoursEnd')?.addEventListener('change', (e) => {
+            const start = parseInt(document.getElementById('quietHoursStart').value.split(':')[0]);
+            const end = parseInt(e.target.value.split(':')[0]);
+            localStorage.setItem('quiet_hours', JSON.stringify({ start, end }));
+            if (window.flowApp?.notifications) {
+                window.flowApp.notifications.setQuietHours(start, end);
+            }
+        });
+
+        // Calendar sync from settings (already handled in calendar-sync.js)
+        // But ensure it's also available here
+        document.getElementById('connectCalendarBtnSettings')?.addEventListener('click', () => {
+            if (window.flowApp?.calendarSync) {
+                window.flowApp.calendarSync.connectGoogleCalendar();
+            } else if (window.CalendarSync) {
+                window.flowApp.calendarSync = new CalendarSync(window.flowApp);
+                window.flowApp.calendarSync.connectGoogleCalendar();
+            }
+        });
+
+        document.getElementById('autoSyncEnabled')?.addEventListener('change', (e) => {
+            localStorage.setItem('auto_sync_enabled', e.target.checked);
+        });
+
+        // Theme switching - use event delegation for dynamically added buttons
+        document.addEventListener('click', (e) => {
+            const themeBtn = e.target.closest('.theme-btn');
+            if (themeBtn) {
+                document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+                themeBtn.classList.add('active');
+                const theme = themeBtn.dataset.theme;
+                this.setUserTheme(theme);
+            }
+        });
+
+        document.getElementById('highContrastEnabled')?.addEventListener('change', (e) => {
+            localStorage.setItem('high_contrast', e.target.checked);
+            if (e.target.checked) {
+                document.body.classList.add('high-contrast-mode');
+            } else {
+                document.body.classList.remove('high-contrast-mode');
+            }
+        });
+
+        document.getElementById('exportDataBtn')?.addEventListener('click', () => {
+            if (window.flowApp?.exportImport) {
+                window.flowApp.exportImport.exportTasksCSV();
+            }
+        });
+
+        document.getElementById('importDataBtn')?.addEventListener('click', () => {
+            document.getElementById('importTasksCSV')?.click();
+        });
+
+        document.getElementById('deleteDataBtn')?.addEventListener('click', () => {
+            if (confirm('Are you sure you want to delete ALL data? This cannot be undone!')) {
+                if (confirm('This will permanently delete all your tasks, habits, and data. Continue?')) {
+                    // Clear all data
+                    this.tasks = [];
+                    this.habits = [];
+                    localStorage.clear();
+                    this.loadData();
+                    this.renderTasks();
+                    this.renderHabits();
+                    if (window.utils) {
+                        window.utils.showToast('All data deleted', 'error');
+                    }
+                }
+            }
         });
 
         // Reschedule modal
@@ -748,13 +1066,27 @@ class FlowApp {
         const input = document.getElementById('taskInput');
         if (!input || !input.value.trim()) return;
 
+        const taskText = input.value.trim();
+        input.value = '';
+
         try {
-            const taskData = utils.parseTaskInput(input.value);
+            // Use smart parser if available, fallback to utils
+            let taskData;
+            if (window.SmartTaskParser) {
+                const parser = new SmartTaskParser();
+                taskData = parser.parse(taskText);
+            } else {
+                taskData = utils.parseTaskInput(taskText);
+            }
             const task = await api.createTask(taskData);
             
             this.tasks.push(task);
             this.renderTasks();
-            input.value = '';
+            
+            // Log activity
+            if (this.activityLog) {
+                this.activityLog.logTaskCreated(task);
+            }
             
             utils.hapticFeedback('light');
             utils.showToast('Task added!');
@@ -779,6 +1111,21 @@ class FlowApp {
             });
             
             console.log('✅ Task toggled successfully. New state:', updated.completed);
+            
+            // Log for undo if completing
+            if (updated.completed && this.undoRedo) {
+                this.undoRedo.addAction({
+                    type: 'complete_task',
+                    data: { ...task }
+                });
+            }
+
+            // Log activity
+            if (this.activityLog) {
+                if (updated.completed) {
+                    this.activityLog.logTaskCompleted(updated);
+                }
+            }
             
             // Update local state in the tasks array
             const taskIndex = this.tasks.findIndex(t => t.id === taskId);
@@ -833,7 +1180,23 @@ class FlowApp {
     }
 
     async handleDeleteTask(taskId) {
+        const task = this.tasks.find(t => t.id === taskId);
+        if (!task) return;
+
         try {
+            // Log for undo
+            if (this.undoRedo) {
+                this.undoRedo.addAction({
+                    type: 'delete_task',
+                    data: { ...task }
+                });
+            }
+
+            // Log activity
+            if (this.activityLog) {
+                this.activityLog.logTaskDeleted(task);
+            }
+
             await api.deleteTask(taskId);
             this.tasks = this.tasks.filter(t => t.id !== taskId);
             this.renderTasks();
@@ -994,8 +1357,21 @@ class FlowApp {
             content.classList.toggle('active', content.id === `${tab}Tab`);
         });
 
+        // Update more menu active state
+        this.updateMoreMenuActiveState();
+        
         // Re-render views to sync with latest data
         if (tab === 'today') {
+            // Ensure sort controls are initialized
+            if (window.taskSorter) {
+                const todaySortContainer = document.getElementById('sortControlToday');
+                if (todaySortContainer && !todaySortContainer.querySelector('.sort-control')) {
+                    const currentSort = window.taskSorter.getDefaultSort('today');
+                    const dropdown = window.taskSorter.createSortDropdown('today', currentSort);
+                    todaySortContainer.innerHTML = '';
+                    todaySortContainer.appendChild(dropdown);
+                }
+            }
             this.renderTasks();
             this.renderFocus();
         } else if (tab === 'habits') {
@@ -1008,7 +1384,19 @@ class FlowApp {
         } else if (tab === 'calendar') {
             await this.renderCalendar();
         } else if (tab === 'alltasks') {
+            // Ensure sort controls are initialized
+            if (window.taskSorter) {
+                const allTasksSortContainer = document.getElementById('sortControlAllTasks');
+                if (allTasksSortContainer && !allTasksSortContainer.querySelector('.sort-control')) {
+                    const currentSort = window.taskSorter.getDefaultSort('alltasks');
+                    const dropdown = window.taskSorter.createSortDropdown('alltasks', currentSort);
+                    allTasksSortContainer.innerHTML = '';
+                    allTasksSortContainer.appendChild(dropdown);
+                }
+            }
             await this.renderAllTasks();
+        } else if (tab === 'settings') {
+            this.renderSettings();
         }
         
         console.log('✅ Tab switched and rendered');
@@ -1026,6 +1414,7 @@ class FlowApp {
         // Filter tasks
         let filteredTasks = [...this.tasks];
 
+
         if (statusFilter === 'completed') {
             filteredTasks = filteredTasks.filter(t => t.completed);
         } else if (statusFilter === 'incomplete') {
@@ -1040,14 +1429,20 @@ class FlowApp {
             filteredTasks = filteredTasks.filter(t => t.category === categoryFilter);
         }
 
-        // Sort by due date, then priority
-        filteredTasks.sort((a, b) => {
-            if (a.completed !== b.completed) return a.completed ? 1 : -1;
-            if (a.due_date && b.due_date) return a.due_date.localeCompare(b.due_date);
-            if (a.due_date) return -1;
-            if (b.due_date) return 1;
-            return 0;
-        });
+        // Get sort option and apply sorting
+        const sortOption = window.taskSorter ? window.taskSorter.getDefaultSort('alltasks') : 'date-asc';
+        if (window.taskSorter) {
+            filteredTasks = window.taskSorter.sortTasks(filteredTasks, sortOption);
+        } else {
+            // Fallback to default sorting
+            filteredTasks.sort((a, b) => {
+                if (a.completed !== b.completed) return a.completed ? 1 : -1;
+                if (a.due_date && b.due_date) return a.due_date.localeCompare(b.due_date);
+                if (a.due_date) return -1;
+                if (b.due_date) return 1;
+                return 0;
+            });
+        }
 
         if (filteredTasks.length === 0) {
             container.innerHTML = '<p style="text-align: center; color: var(--calm-text-2); padding: 3rem;">No tasks found</p>';
@@ -1263,6 +1658,25 @@ class FlowApp {
                 
                 title.textContent = this.formatCalendarTitle('day');
                 container.innerHTML = this.renderDayView(data);
+                
+                // Add sort control to day view header if not already present
+                const dayView = container.querySelector('.day-view');
+                if (dayView && window.taskSorter) {
+                    const tasksSection = dayView.querySelector('.day-section');
+                    if (tasksSection) {
+                        const existingSort = tasksSection.querySelector('.sort-control-wrapper');
+                        if (!existingSort) {
+                            const sortWrapper = document.createElement('div');
+                            sortWrapper.className = 'sort-control-wrapper';
+                            sortWrapper.style.marginBottom = '1rem';
+                            const currentSort = window.taskSorter.getDefaultSort('calendar');
+                            const dropdown = window.taskSorter.createSortDropdown('calendar', currentSort);
+                            sortWrapper.appendChild(dropdown);
+                            tasksSection.insertBefore(sortWrapper, tasksSection.querySelector('h3').nextSibling);
+                        }
+                    }
+                }
+                
                 // Attach listeners AFTER DOM update
                 setTimeout(() => this.attachCalendarListeners(), 0);
             } else if (this.calendarView === 'week') {
@@ -1305,10 +1719,19 @@ class FlowApp {
     renderDayView(data) {
         let html = '<div class="day-view">';
         
-        // Tasks
+        // Tasks - sort them first
         if (data.tasks && data.tasks.length > 0) {
+            // Get sort option for calendar
+            const sortOption = window.taskSorter ? window.taskSorter.getDefaultSort('calendar') : 'priority-desc';
+            let sortedTasks = [...data.tasks];
+            
+            // Apply sorting
+            if (window.taskSorter) {
+                sortedTasks = window.taskSorter.sortTasks(sortedTasks, sortOption);
+            }
+            
             html += '<div class="day-section"><h3>Tasks</h3>';
-            data.tasks.forEach(task => {
+            sortedTasks.forEach(task => {
                 const priorityDot = task.priority ? `<span class="priority-dot priority-${task.priority}"></span>` : '';
                 html += `
                     <div class="calendar-task-item ${task.completed ? 'completed' : ''}" data-task-id="${task.id}">
@@ -1516,11 +1939,112 @@ class FlowApp {
     setupBottomSheet() {
         const overlay = document.getElementById('bottomSheetOverlay');
         const sheet = document.getElementById('bottomSheet');
+        const handle = document.querySelector('.bottom-sheet-handle');
         
         if (overlay) {
             overlay.addEventListener('click', () => {
                 this.closeBottomSheet();
             });
+        }
+
+        // Drag to close functionality
+        if (sheet && handle) {
+            let isDragging = false;
+            let startY = 0;
+            let currentY = 0;
+            let startTransform = 0;
+
+            // Mouse events
+            handle.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                startY = e.clientY;
+                const transform = window.getComputedStyle(sheet).transform;
+                if (transform && transform !== 'none') {
+                    const matrix = new DOMMatrix(transform);
+                    startTransform = matrix.m42;
+                } else {
+                    startTransform = 0;
+                }
+                handle.style.cursor = 'grabbing';
+                e.preventDefault();
+            });
+
+            // Touch events
+            handle.addEventListener('touchstart', (e) => {
+                isDragging = true;
+                startY = e.touches[0].clientY;
+                const transform = window.getComputedStyle(sheet).transform;
+                if (transform && transform !== 'none') {
+                    const matrix = new DOMMatrix(transform);
+                    startTransform = matrix.m42;
+                } else {
+                    startTransform = 0;
+                }
+                e.preventDefault();
+            });
+
+            // Mouse move
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                currentY = e.clientY;
+                const deltaY = currentY - startY;
+                const newTransform = Math.max(0, startTransform + deltaY);
+                sheet.style.transform = `translateY(${newTransform}px)`;
+                sheet.style.transition = 'none';
+            });
+
+            // Touch move
+            document.addEventListener('touchmove', (e) => {
+                if (!isDragging) return;
+                currentY = e.touches[0].clientY;
+                const deltaY = currentY - startY;
+                const newTransform = Math.max(0, startTransform + deltaY);
+                sheet.style.transform = `translateY(${newTransform}px)`;
+                sheet.style.transition = 'none';
+                e.preventDefault();
+            });
+
+            // Mouse up / Touch end
+            const endDrag = (e) => {
+                if (!isDragging) return;
+                isDragging = false;
+                handle.style.cursor = 'grab';
+                sheet.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+                
+                const deltaY = currentY - startY;
+                const threshold = 100; // Minimum drag distance to close
+                
+                if (deltaY > threshold) {
+                    // Close the sheet
+                    this.closeBottomSheet();
+                } else {
+                    // Snap back to open position
+                    sheet.style.transform = 'translateY(0)';
+                }
+            };
+
+            document.addEventListener('mouseup', endDrag);
+            document.addEventListener('touchend', endDrag);
+            
+            // Also allow dragging from the header area
+            const header = document.querySelector('.bottom-sheet-header');
+            if (header) {
+                header.addEventListener('mousedown', (e) => {
+                    if (e.target === header || e.target.closest('.bottom-sheet-header')) {
+                        isDragging = true;
+                        startY = e.clientY;
+                        const transform = window.getComputedStyle(sheet).transform;
+                        if (transform && transform !== 'none') {
+                            const matrix = new DOMMatrix(transform);
+                            startTransform = matrix.m42;
+                        } else {
+                            startTransform = 0;
+                        }
+                        header.style.cursor = 'grabbing';
+                        e.preventDefault();
+                    }
+                });
+            }
         }
 
         // Add click handlers to calendar days
@@ -1568,6 +2092,9 @@ class FlowApp {
             // Show bottom sheet
             overlay.classList.add('active');
             sheet.classList.add('active');
+            // Reset transform to ensure clean open animation
+            sheet.style.transform = '';
+            sheet.style.transition = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
             
             utils.hapticFeedback('light');
         } catch (error) {
@@ -1881,6 +2408,12 @@ class FlowApp {
         const overlay = document.getElementById('bottomSheetOverlay');
         const sheet = document.getElementById('bottomSheet');
         
+        if (sheet) {
+            // Reset any transform styles
+            sheet.style.transform = '';
+            sheet.style.transition = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+        }
+        
         if (overlay) overlay.classList.remove('active');
         if (sheet) sheet.classList.remove('active');
     }
@@ -2057,27 +2590,88 @@ class FlowApp {
         const container = document.getElementById('tasksList');
         if (!container) return;
 
-        const today = new Date().toISOString().split('T')[0];
-        const todayTasks = this.tasks.filter(t => 
-            !t.due_date || t.due_date <= today
-        ).sort((a, b) => {
-            if (a.completed !== b.completed) {
-                return a.completed ? 1 : -1;
-            }
-            return (b.id || 0) - (a.id || 0);
+        const todayDate = new Date().toISOString().split('T')[0];
+        
+        // Filter tasks due today or earlier (or no due date)
+        const todayTasks = this.tasks.filter(t => {
+            return !t.due_date || t.due_date <= todayDate;
         });
+        
+        // Get sort option
+        const sortOption = window.taskSorter ? window.taskSorter.getDefaultSort('today') : 'priority-desc';
+        
+        // Ongoing tasks: not completed
+        let ongoingTasks = todayTasks.filter(t => !t.completed);
+        
+        // Completed tasks: only show tasks completed TODAY
+        let completedTasks = todayTasks.filter(t => {
+            if (!t.completed) return false;
+            const completedDate = t.completed_at ? t.completed_at.split('T')[0] : null;
+            // Only show if completed today
+            return completedDate === todayDate;
+        });
+        
+        // Apply sorting
+        if (window.taskSorter) {
+            ongoingTasks = window.taskSorter.sortTasks(ongoingTasks, sortOption);
+            completedTasks = window.taskSorter.sortTasks(completedTasks, sortOption);
+        } else {
+            // Fallback to default sorting
+            ongoingTasks.sort((a, b) => (b.id || 0) - (a.id || 0));
+            completedTasks.sort((a, b) => (b.id || 0) - (a.id || 0));
+        }
 
         container.innerHTML = '';
 
-        if (todayTasks.length === 0) {
+        if (ongoingTasks.length === 0 && completedTasks.length === 0) {
             container.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 2rem;">No tasks for today. Add one above! ✨</p>';
+            // Re-setup swipe gestures
+            this.setupSwipeGestures();
             return;
         }
 
-        todayTasks.forEach(task => {
-            const taskEl = this.createTaskElement(task);
-            container.appendChild(taskEl);
-        });
+        // Ongoing tasks section
+        if (ongoingTasks.length > 0) {
+            ongoingTasks.forEach(task => {
+                const taskEl = this.createTaskElement(task);
+                container.appendChild(taskEl);
+            });
+        }
+
+        // Completed tasks section
+        if (completedTasks.length > 0) {
+            const completedSection = document.createElement('div');
+            completedSection.className = 'completed-tasks-section';
+            completedSection.innerHTML = `
+                <div class="completed-tasks-header">
+                    <h3>Completed</h3>
+                    <button class="collapse-completed-btn" id="collapseCompletedBtn" title="Collapse/Expand">
+                        <span class="icon icon-xs" id="completedToggleIcon">▼</span>
+                    </button>
+                </div>
+                <div class="completed-tasks-list" id="completedTasksList"></div>
+            `;
+            container.appendChild(completedSection);
+
+            const completedList = document.getElementById('completedTasksList');
+            completedTasks.forEach(task => {
+                const taskEl = this.createTaskElement(task);
+                completedList.appendChild(taskEl);
+            });
+
+            // Collapse/expand functionality
+            const collapseBtn = document.getElementById('collapseCompletedBtn');
+            const toggleIcon = document.getElementById('completedToggleIcon');
+            let isCollapsed = false;
+            
+            collapseBtn?.addEventListener('click', () => {
+                isCollapsed = !isCollapsed;
+                if (completedList) {
+                    completedList.style.display = isCollapsed ? 'none' : 'block';
+                    toggleIcon.textContent = isCollapsed ? '▶' : '▼';
+                }
+            });
+        }
 
         // Re-setup swipe gestures
         this.setupSwipeGestures();
@@ -2579,6 +3173,10 @@ class FlowApp {
     }
 
     getHabitIcon(name, fallbackIcon) {
+        // Use the stored icon if available, otherwise fall back to type detection
+        if (fallbackIcon) {
+            return fallbackIcon;
+        }
         const type = this.getHabitType(name);
         const iconMap = {
             water: FlowIcons.water,
@@ -3293,6 +3891,202 @@ class FlowApp {
 // Initialize app when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
     window.flowApp = new FlowApp();
+    
+    // Initialize Batch 6 features
+    if (window.GlobalSearch) {
+        window.flowApp.globalSearch = new GlobalSearch(window.flowApp);
+    }
+    
+    if (window.UndoRedoSystem) {
+        window.flowApp.undoRedo = new UndoRedoSystem(window.flowApp);
+    }
+    
+    if (window.FocusMode) {
+        window.flowApp.focusMode = new FocusMode(window.flowApp);
+    }
+    
+    if (window.GestureSystem) {
+        window.flowApp.gestures = new GestureSystem(window.flowApp);
+    }
+    
+    if (window.DragDropSystem) {
+        window.flowApp.dragDrop = new DragDropSystem(window.flowApp);
+    }
+    
+    if (window.TaskGroups) {
+        window.flowApp.taskGroups = new TaskGroups(window.flowApp);
+    }
+    
+    if (window.Templates) {
+        window.flowApp.templates = new Templates(window.flowApp);
+    }
+    
+    
+    if (window.ActivityLog) {
+        window.flowApp.activityLog = new ActivityLog(window.flowApp);
+    }
+    
+    if (window.SmartScheduling) {
+        window.flowApp.scheduling = new SmartScheduling(window.flowApp);
+    }
+    
+    if (window.OfflineSystem) {
+        window.flowApp.offline = new OfflineSystem(window.flowApp);
+    }
+    
+    if (window.IOSShortcuts) {
+        window.flowApp.shortcuts = new IOSShortcuts(window.flowApp);
+        window.flowApp.shortcuts.handleURLParams();
+    }
+
+    // Batch 7: Enterprise Features
+    if (window.AuthSystem) {
+        window.flowApp.auth = new AuthSystem(window.flowApp);
+    }
+
+    if (window.CalendarSync) {
+        window.flowApp.calendarSync = new CalendarSync(window.flowApp);
+    }
+
+    if (window.EnhancedOffline) {
+        window.flowApp.offlineSync = new EnhancedOffline(window.flowApp);
+    }
+
+    if (window.ExportImport) {
+        window.flowApp.exportImport = new ExportImport(window.flowApp);
+    }
+
+    if (window.KeyboardShortcuts) {
+        window.flowApp.keyboardShortcuts = new KeyboardShortcuts(window.flowApp);
+    }
+
+    if (window.DashboardWidgets) {
+        window.flowApp.widgets = new DashboardWidgets(window.flowApp);
+    }
+
+    if (window.EnhancedPomodoro) {
+        window.flowApp.enhancedPomodoro = new EnhancedPomodoro(window.flowApp);
+    }
+
+    if (window.NotificationsSystem) {
+        window.flowApp.notifications = new NotificationsSystem(window.flowApp);
+    }
+
+    if (window.CrossDeviceSync) {
+        window.flowApp.crossDeviceSync = new CrossDeviceSync(window.flowApp);
+    }
+
+    if (window.CalendarUX) {
+        window.flowApp.calendarUX = new CalendarUX(window.flowApp);
+    }
+
+    // Initialize calendar sync UI
+    if (window.flowApp.calendarSync) {
+        window.flowApp.calendarSync.checkConnectionStatus();
+    }
+
+    // Initialize widgets
+    if (window.flowApp.widgets) {
+        window.flowApp.widgets.renderWidgets();
+    }
+
+    // Close focus mode button
+    document.getElementById('closeFocusMode')?.addEventListener('click', () => {
+        if (window.flowApp.enhancedPomodoro) {
+            window.flowApp.enhancedPomodoro.hideFocusMode();
+        }
+    });
+    
+    // Enhanced mood tracking (integrate with existing)
+    if (window.flowApp.activityLog) {
+        // Log mood changes
+        const originalHandleMoodSelect = window.flowApp.handleMoodSelect;
+        if (originalHandleMoodSelect) {
+            window.flowApp.handleMoodSelect = function(level) {
+                originalHandleMoodSelect.call(this, level);
+                window.flowApp.activityLog.logActivity('mood_logged', { level });
+            };
+        }
+    }
+
+    // Render activity log on stats tab
+    if (window.flowApp.activityLog) {
+        const originalSwitchTab = window.flowApp.switchTab;
+        if (originalSwitchTab) {
+            window.flowApp.switchTab = async function(tab) {
+                await originalSwitchTab.call(this, tab);
+                if (tab === 'stats' && this.activityLog) {
+                    this.activityLog.renderActivities();
+                }
+            };
+        }
+    }
+
+    // Show schedule button when there are tasks
+    const originalRenderTasks = window.flowApp.renderTasks;
+    if (originalRenderTasks) {
+        window.flowApp.renderTasks = function() {
+            originalRenderTasks.call(this);
+            const scheduleBtn = document.getElementById('scheduleTodayBtn');
+            if (scheduleBtn) {
+                const uncompletedTasks = this.tasks.filter(t => !t.completed);
+                scheduleBtn.style.display = uncompletedTasks.length > 0 ? 'flex' : 'none';
+            }
+        };
+    }
 });
+
+// Batch 6: Helper methods for FlowApp
+FlowApp.prototype.showTemplatesModal = function() {
+    const modal = document.getElementById('templatesModal');
+    const content = document.getElementById('templatesContent');
+    if (modal && content && this.templates) {
+        this.templates.renderTemplates(content);
+        modal.style.display = 'block';
+    }
+};
+
+
+FlowApp.prototype.showScheduleModal = function(schedule) {
+    // Create or show schedule modal
+    let modal = document.getElementById('scheduleModal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'scheduleModal';
+        modal.className = 'modal';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Suggested Schedule</h3>
+                    <button class="modal-close" id="closeScheduleModal">×</button>
+                </div>
+                <div class="modal-body" id="scheduleContent"></div>
+                <div class="modal-footer">
+                    <button class="btn-primary" id="applyScheduleBtn">Apply Schedule</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+
+        document.getElementById('closeScheduleModal').addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        document.getElementById('applyScheduleBtn').addEventListener('click', async () => {
+            if (this.scheduling) {
+                await this.scheduling.applySchedule(schedule.schedule);
+                modal.style.display = 'none';
+                utils.showToast('Schedule applied!');
+            }
+        });
+    }
+
+    const content = document.getElementById('scheduleContent');
+    if (content && this.scheduling) {
+        content.innerHTML = this.scheduling.renderSchedule(schedule.schedule);
+    }
+
+    modal.style.display = 'block';
+};
 
 
