@@ -40,6 +40,8 @@ Flow_App/
     ├── batch3-design-premium/
     ├── batch4-intelligent-companion/
     ├── batch5-calm-design/
+    ├── batch6-power-features/
+    ├── batch7-enterprise-features/
     ├── COMPARISON_GUIDE.md
     ├── INDEX.md
     └── README.md
@@ -55,18 +57,50 @@ css/
 ├── main.css                    # Base styles, layout, legacy
 ├── design-system.css           # Premium components, glassmorphism
 ├── calm-theme.css              # Color system, typography
-└── calm-enhancements.css       # Latest refinements
+├── batch6-features.css         # Batch 6 feature styles
+├── batch7-features.css         # Batch 7 enterprise features
+├── mobile-optimization.css     # Mobile responsiveness
+├── mobile-nav-redesign.css     # Mobile navigation
+├── search-compact.css          # Compact search styles
+├── spacing-optimization.css    # Layout spacing
+├── task-sorting.css            # Task sorting UI
+├── light-theme-fix.css         # Theme fixes
+└── themes.css                  # Theme system
 ```
 
-**Load Order:** main.css → design-system.css → calm-theme.css → calm-enhancements.css
+**Load Order:** main.css → design-system.css → calm-theme.css → batch6-features.css → batch7-features.css → mobile-optimization.css → spacing-optimization.css → others
 
 ### **JavaScript Files** (`/static/js/`)
 ```
 js/
-├── main.js                     # App logic, UI interactions (3,000+ lines)
+├── main.js                     # App logic, UI interactions (4,093 lines)
 ├── api.js                      # Backend API client
 ├── utils.js                    # Utility functions, parsers
-└── icons.js                    # SVG icon library (50+ icons)
+├── icons.js                    # SVG icon library (50+ icons)
+├── search.js                   # Global search functionality
+├── task-sorting.js             # Task sorting system
+├── auth.js                     # Authentication system
+├── calendar-sync.js            # Calendar synchronization
+├── calendar-ux.js              # Calendar UX enhancements
+├── enhanced-offline.js         # Offline mode
+├── notifications.js            # Push notifications
+├── keyboard-shortcuts.js       # Keyboard navigation
+├── smart-parser.js             # Natural language parsing
+├── export-import.js            # Data portability
+├── widgets.js                  # Dashboard widgets
+├── focus-mode.js               # Focus mode
+├── dragdrop.js                 # Drag and drop
+├── gestures.js                 # Touch gestures
+├── templates.js                # Task templates
+├── undo-redo.js                # Undo/redo system
+├── projects.js                 # Project management
+├── scheduling.js               # Smart scheduling
+├── task-groups.js              # Task grouping
+├── activity-log.js             # Activity logging
+├── enhanced-pomodoro.js        # Pomodoro timer
+├── cross-device-sync.js        # Cross-device sync
+├── ios-shortcuts.js            # iOS shortcuts
+└── offline.js                  # Offline support
 ```
 
 ### **PWA Files**
@@ -220,18 +254,18 @@ versions/
 ## 📊 File Statistics
 
 ### **Code Files:**
-- **Python:** 1 file (1,665 lines)
-- **JavaScript:** 4 files (4,000+ lines total)
-- **CSS:** 4 files (3,000+ lines total)
-- **HTML:** 1 file (800+ lines)
+- **Python:** 1 file (1,800+ lines)
+- **JavaScript:** 30+ files (15,000+ lines total)
+- **CSS:** 12+ files (5,000+ lines total)
+- **HTML:** 1 file (1,000+ lines)
 
 ### **Documentation:**
-- **Total Docs:** 35+ markdown files
+- **Total Docs:** 40+ markdown files
 - **User Guides:** 4 files
-- **Changelogs:** 8 files
+- **Changelogs:** 10+ files
 - **Technical:** 7 files
 - **Fixes:** 12 files
-- **Version Docs:** 6 batches
+- **Version Docs:** 8 batches (0-7)
 
 ### **Assets:**
 - **Icons:** 2 PNG files (PWA)
@@ -315,7 +349,7 @@ Everything in `docs/` and `versions/` is for development reference only.
 
 ---
 
-*Last updated: December 5, 2025*
+*Last updated: January 2025 (Batch 7 UX Improvements)*
 
 For questions about file locations, consult this document or the [main README](README.md).
 

@@ -6,7 +6,7 @@
 
 ## 🎯 **How to Use This Guide**
 
-This project was built in **6 batches** (versions), each adding new features and complexity. Study them in order to learn:
+This project was built in **8 batches** (versions), each adding new features and complexity. Study them in order to learn:
 
 - **Batch 0 (MVP)**: Basic Flask backend + simple frontend
 - **Batch 1**: Smart features & UX improvements
@@ -15,6 +15,7 @@ This project was built in **6 batches** (versions), each adding new features and
 - **Batch 4**: Advanced behavior engine
 - **Batch 5**: Design overhaul & calm theme
 - **Batch 6**: Power features & premium experience
+- **Batch 7**: Enterprise features, authentication, mobile optimization & UX polish
 
 ---
 

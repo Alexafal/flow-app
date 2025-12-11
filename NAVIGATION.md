@@ -28,8 +28,8 @@
 
 ### **Explore Code**
 ✅ [Project structure](PROJECT_STRUCTURE.md) → File organization
-✅ [Backend](app.py) → Flask server (1,665 lines)
-✅ [Frontend](static/js/main.js) → App logic (3,299 lines)
+✅ [Backend](app.py) → Flask server (1,800+ lines)
+✅ [Frontend](static/js/main.js) → App logic (4,093 lines)
 
 ---
 
@@ -75,7 +75,7 @@ Flow_App/
 │   └── flow_data.json
 │
 └── 🕰 versions/               ← Historical code
-    └── batch0-5/             ← 6 versions
+    └── batch0-7/             ← 8 versions
 ```
 
 ---
@@ -137,15 +137,15 @@ Flow_App/
 ## 📊 Statistics
 
 **Project Size:**
-- **Code:** ~9,000 lines
-- **Documentation:** 35+ files
-- **Versions:** 6 batches
-- **Features:** 50+ implemented
+- **Code:** ~15,000+ lines
+- **Documentation:** 40+ files
+- **Versions:** 8 batches (0-7)
+- **Features:** 60+ implemented
 
 **Key Files:**
-- Longest: `main.js` (3,299 lines)
-- Backend: `app.py` (1,665 lines)
-- Most docs: `fixes/` (12 files)
+- Longest: `main.js` (4,093 lines)
+- Backend: `app.py` (1,800+ lines)
+- Most docs: `fixes/` and `versions/` (20+ files)
 
 ---
 
@@ -216,5 +216,5 @@ ROOT
 
 **Still lost?** Open [README.md](README.md) and start fresh!
 
-*Last updated: December 5, 2025*
+*Last updated: January 2025 (Batch 7 UX Improvements)*
 

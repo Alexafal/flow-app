@@ -31,10 +31,34 @@ versions/
 │   ├── templates/
 │   └── static/
 │
-└── batch4-intelligent-companion/
-    ├── CHANGES.md (behavior engine, personalization) ⭐ NEW
+├── batch4-intelligent-companion/
+│   ├── CHANGES.md (behavior engine, personalization)
+│   ├── NOTE.txt
+│   ├── app.py
+│   ├── requirements.txt
+│   ├── templates/
+│   └── static/
+│
+├── batch5-calm-design/
+│   ├── CHANGES.md (calm theme, typography)
+│   ├── NOTE.txt
+│   ├── app.py
+│   ├── requirements.txt
+│   ├── templates/
+│   └── static/
+│
+├── batch6-power-features/
+│   ├── CHANGES.md (advanced features, drag-drop, search)
+│   ├── NOTE.txt
+│   ├── app.py
+│   ├── requirements.txt
+│   ├── templates/
+│   └── static/
+│
+└── batch7-enterprise-features/ ⭐ CURRENT
+    ├── CHANGES.md (authentication, calendar sync, mobile optimization)
     ├── NOTE.txt
-    ├── app.py (FULL CURRENT CODE - 7,674 lines)
+    ├── app.py (FULL CURRENT CODE - 1,800+ lines)
     ├── requirements.txt
     ├── templates/ (all HTML)
     └── static/ (all CSS/JS)
@@ -55,7 +79,12 @@ Read these files in order:
 
 ### 2. Run the Final Version
 ```bash
-cd batch3-design-premium
+# Use the root directory (latest version)
+pip install -r requirements.txt
+python app.py
+
+# Or use batch7-enterprise-features snapshot
+cd versions/batch7-enterprise-features
 pip install -r requirements.txt
 python app.py
 ```
@@ -63,7 +92,8 @@ python app.py
 Open: http://localhost:5000
 
 ### 3. Study the Code
-- **batch3-design-premium/** has the complete current code
+- **Root directory** has the latest code with Batch 7 UX improvements
+- **batch7-enterprise-features/** has the Batch 7 snapshot
 - Read CHANGES.md files to understand what was added in each batch
 - Use COMPARISON_GUIDE.md to see specific differences
 
@@ -79,6 +109,8 @@ Open: http://localhost:5000
 | **Batch 3** | 6,142 | Design polish | Soul |
 | **Batch 4** | 7,674 | +10 personalized | Companion |
 | **Batch 5** | ~9,500 | Design refinement | Sanctuary |
+| **Batch 6** | ~11,000 | Power features | Premium |
+| **Batch 7** | ~15,000+ | Enterprise + Mobile | Production-ready |
 
 ---
 
