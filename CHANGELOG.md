@@ -165,4 +165,66 @@ See individual batch documentation in `versions/` directory:
 - Batch 4: Intelligent Companion
 - Batch 5: Calm Design
 - Batch 6: Power Features
+- Batch 7: Enterprise Features + Visual Task Graph
+
+---
+
+## [Batch 7 Visual Task Graph] - January 2025
+
+### Major Feature Added
+
+#### Visual Task Graph
+- ✅ **Interactive Canvas Visualization**: Drag-and-drop tasks in 2D space
+- ✅ **Connection System**: Easy click-to-connect with buttons on each task node
+- ✅ **Connection Types**: Relates To, Depends On, Part Of (color-coded)
+- ✅ **Delete Connections**: Right-click or Shift+click to delete
+- ✅ **Zoom & Pan**: Mouse wheel, pinch gestures, drag empty space
+- ✅ **Touch Support**: Full mobile gesture support
+- ✅ **Export/Import**: Save and load graph layouts
+- ✅ **Auto Layout**: Force-directed algorithm for automatic arrangement
+- ✅ **Center View**: Fit all nodes in viewport
+- ✅ **Context Menus**: Right-click tasks and connections for actions
+
+### Files Added
+
+#### JavaScript
+- `static/js/task-graph.js` - Complete graph visualization system (~1000 lines)
+
+#### CSS
+- `static/css/task-graph.css` - Graph view styling and controls
+
+#### Documentation
+- `BATCH7_TASK_GRAPH.md` - Complete feature documentation
+
+### Files Modified
+
+- `templates/index.html` - Added graph tab, controls, instructions
+- `static/js/main.js` - Graph initialization and tab handling
+- `static/js/icons.js` - Added graph icon
+- `CHANGELOG.md` - Updated with new feature
+
+### Technical Features
+
+- Canvas-based rendering with 60 FPS
+- Connection button system (4 buttons per node)
+- Connection mode toggle with visual feedback
+- localStorage persistence for positions and connections
+- Export/import JSON format
+- Force-directed layout algorithm
+- Point-to-line distance for edge selection
+- Mobile-optimized touch gestures
+
+### User Experience
+
+- Intuitive click-to-connect workflow
+- Visual feedback during connection creation
+- Multiple connection deletion methods
+- Comprehensive instructions panel
+- Integration with existing task system
+- Context menu support
+- Task editor integration
+
+---
+
+## [Previous Batches]
 
