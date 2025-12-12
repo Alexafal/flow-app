@@ -1,5 +1,34 @@
 # Flow App - Changelog
 
+## [Batch 7 UX Improvements + Visual Task Graph] - January 2025
+
+### Major Features Added
+
+#### Visual Task Graph (Spider Web Visualization) 🕸️
+- ✅ **Interactive Canvas System**: Drag, drop, zoom, and pan tasks in 2D space
+- ✅ **Connection Buttons**: Click-to-connect system with 4 buttons per task node
+- ✅ **Connection Types**: Relates To, Depends On, Part Of with color coding
+- ✅ **Connection Management**: Right-click to delete, context menus, clear all
+- ✅ **Additional Features**: 
+  - Center view button
+  - Auto-layout (force-directed algorithm)
+  - Export/import graph layouts
+  - Search and filter
+  - Connection info display
+- ✅ **Mobile Support**: Touch-friendly buttons, long-press menus, optimized rendering
+
+### Files Added
+- `static/js/task-graph.js` - Complete graph visualization system
+- `static/css/task-graph.css` - Graph view styling
+
+### Files Modified
+- `templates/index.html` - Added Graph tab and UI controls
+- `static/js/main.js` - Graph initialization and integration
+- `static/js/icons.js` - Added graph icon
+- `BATCH7_UX_IMPROVEMENTS.md` - Documented graph feature
+
+---
+
 ## [Batch 7 UX Improvements] - January 2025
 
 ### Major Features Added
@@ -136,3 +165,4 @@ See individual batch documentation in `versions/` directory:
 - Batch 4: Intelligent Companion
 - Batch 5: Calm Design
 - Batch 6: Power Features
+

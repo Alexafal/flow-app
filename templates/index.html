@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/batch6-features.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/batch7-features.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/task-sorting.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/task-graph.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-optimization.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/spacing-optimization.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-nav-redesign.css') }}">
@@ -204,6 +205,10 @@
                 <span class="icon icon-sm" id="icon-stats"></span>
                 <span class="nav-label">Stats</span>
             </button>
+            <button class="nav-item ripple tap-scale nav-item-mobile-hidden" data-tab="graph">
+                <span class="icon icon-sm" id="icon-graph"></span>
+                <span class="nav-label">Graph</span>
+            </button>
             <!-- More button for mobile -->
             <button class="nav-more-btn" id="navMoreBtn">
                 <span class="icon icon-sm">⋯</span>
@@ -226,6 +231,10 @@
             <button class="more-menu-item" data-tab="stats">
                 <span class="icon icon-sm" id="icon-stats-menu"></span>
                 <span class="menu-label">Stats</span>
+            </button>
+            <button class="more-menu-item" data-tab="graph">
+                <span class="icon icon-sm" id="icon-graph-menu"></span>
+                <span class="menu-label">Task Graph</span>
             </button>
         </div>
 
@@ -354,6 +363,52 @@
                     </div>
                     <button class="btn-primary" id="setFocusBtn">Set Focus</button>
                     <div class="current-focus" id="currentFocus"></div>
+                </div>
+            </div>
+
+            <!-- Task Graph Tab -->
+            <div class="tab-content" id="graphTab">
+                <div class="graph-view-container">
+                    <div class="graph-header">
+                        <h2>Task Graph</h2>
+                        <div class="graph-controls">
+                            <button class="btn-primary btn-sm" id="toggleConnectionModeBtn">Connect Tasks</button>
+                            <select id="connectionTypeSelector" class="connection-type-select" disabled>
+                                <option value="relates">Relates To</option>
+                                <option value="depends">Depends On</option>
+                                <option value="part_of">Part Of</option>
+                            </select>
+                            <button class="btn-secondary btn-sm" id="refreshGraphBtn" title="Refresh">
+                                <span class="icon icon-xs">↻</span>
+                            </button>
+                            <button class="btn-secondary btn-sm" id="centerViewBtn" title="Center View">
+                                <span class="icon icon-xs">🎯</span>
+                            </button>
+                            <button class="btn-secondary btn-sm" id="clearConnectionsBtn" title="Clear All Connections">
+                                <span class="icon icon-xs">🗑</span>
+                            </button>
+                            <button class="btn-secondary btn-sm" id="exportGraphBtn" title="Export">
+                                <span class="icon icon-xs">📥</span>
+                            </button>
+                            <button class="btn-secondary btn-sm" id="importGraphBtn" title="Import">
+                                <span class="icon icon-xs">📤</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="graph-instructions">
+                        <p><strong>📌 Instructions:</strong></p>
+                        <ul>
+                            <li><strong>Click "Connect Tasks"</strong> button, then click the blue buttons on task boxes to connect them</li>
+                            <li><strong>Drag</strong> tasks to move them around</li>
+                            <li><strong>Pinch/Scroll</strong> to zoom in/out</li>
+                            <li><strong>Drag empty space</strong> to pan the view</li>
+                            <li><strong>Right-click</strong> a connection to delete it</li>
+                            <li><strong>Double-click</strong> a task to edit it</li>
+                            <li><strong>Long-press</strong> (mobile) or right-click tasks for context menu</li>
+                        </ul>
+                    </div>
+                    <div id="taskGraphContainer" class="task-graph-canvas-container"></div>
+                    <input type="file" id="importGraphInput" accept=".json" style="display: none;">
                 </div>
             </div>
 
@@ -1129,6 +1184,7 @@
     <script src="{{ url_for('static', filename='js/cross-device-sync.js') }}"></script>
     <script src="{{ url_for('static', filename='js/calendar-ux.js') }}"></script>
     <script src="{{ url_for('static', filename='js/task-sorting.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/task-graph.js') }}"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     
     <!-- PWA Registration -->

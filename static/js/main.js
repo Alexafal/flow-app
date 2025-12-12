@@ -163,7 +163,8 @@ class FlowApp {
             'icon-focus': 'focus',
             'icon-stats': 'stats',
             'icon-reflect': 'reflect',
-            'icon-alltasks': 'list'
+            'icon-alltasks': 'list',
+            'icon-graph': 'graph'
         };
 
         Object.entries(iconMappings).forEach(([id, iconName]) => {
@@ -1397,9 +1398,87 @@ class FlowApp {
             await this.renderAllTasks();
         } else if (tab === 'settings') {
             this.renderSettings();
+        } else if (tab === 'graph') {
+            // Initialize task graph
+            this.initializeTaskGraph();
         }
         
         console.log('✅ Tab switched and rendered');
+    }
+
+    initializeTaskGraph() {
+        // Initialize or refresh task graph
+        if (!window.taskGraph) {
+            window.taskGraph = new TaskGraph(this);
+        } else {
+            window.taskGraph.refresh();
+        }
+
+        // Setup control buttons
+        const refreshBtn = document.getElementById('refreshGraphBtn');
+        const clearBtn = document.getElementById('clearConnectionsBtn');
+        const exportBtn = document.getElementById('exportGraphBtn');
+        const importBtn = document.getElementById('importGraphBtn');
+        const importInput = document.getElementById('importGraphInput');
+
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', () => {
+                if (window.taskGraph) {
+                    window.taskGraph.refresh();
+                }
+            });
+        }
+
+        const toggleConnectionBtn = document.getElementById('toggleConnectionModeBtn');
+        const connectionTypeSelector = document.getElementById('connectionTypeSelector');
+        const centerViewBtn = document.getElementById('centerViewBtn');
+
+        if (toggleConnectionBtn && window.taskGraph) {
+            toggleConnectionBtn.addEventListener('click', () => {
+                window.taskGraph.toggleConnectionMode();
+            });
+        }
+
+        if (connectionTypeSelector && window.taskGraph) {
+            connectionTypeSelector.addEventListener('change', (e) => {
+                window.taskGraph.setConnectionType(e.target.value);
+            });
+        }
+
+        if (centerViewBtn && window.taskGraph) {
+            centerViewBtn.addEventListener('click', () => {
+                window.taskGraph.centerView();
+            });
+        }
+
+        if (clearBtn) {
+            clearBtn.addEventListener('click', () => {
+                if (window.taskGraph) {
+                    window.taskGraph.clearAll();
+                }
+            });
+        }
+
+        if (exportBtn) {
+            exportBtn.addEventListener('click', () => {
+                if (window.taskGraph) {
+                    window.taskGraph.exportGraph();
+                }
+            });
+        }
+
+        if (importBtn && importInput) {
+            importBtn.addEventListener('click', () => {
+                importInput.click();
+            });
+
+            importInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file && window.taskGraph) {
+                    window.taskGraph.importGraph(file);
+                }
+            });
+        }
     }
 
     async renderAllTasks() {
@@ -2070,8 +2149,11 @@ class FlowApp {
             }
         }
 
-        // Add click handlers to calendar days
+        // Add click handlers to calendar days (desktop)
         document.addEventListener('click', (e) => {
+            // Skip if this was a touch event (mobile uses long-press instead)
+            if (e.touches || e.changedTouches) return;
+            
             const monthDay = e.target.closest('.month-day');
             const weekDay = e.target.closest('.week-day');
             
@@ -2083,6 +2165,77 @@ class FlowApp {
                 this.openDayDetails(date);
             }
         });
+        
+        // Add long-press support for calendar days (mobile)
+        // Use event delegation for dynamically rendered calendar days
+        let calendarDaysPressTimer = null;
+        let calendarDaysTouchStart = null;
+        const CALENDAR_LONG_PRESS_DELAY = 400; // Slightly shorter for calendar days
+        const CALENDAR_MOVE_THRESHOLD = 10;
+        
+        document.addEventListener('touchstart', (e) => {
+            const monthDay = e.target.closest('.month-day');
+            const weekDay = e.target.closest('.week-day');
+            
+            if (monthDay || weekDay) {
+                const dayElement = monthDay || weekDay;
+                const touch = e.touches[0];
+                
+                calendarDaysTouchStart = {
+                    element: dayElement,
+                    x: touch.clientX,
+                    y: touch.clientY,
+                    date: dayElement.dataset.date
+                };
+                
+                calendarDaysPressTimer = setTimeout(() => {
+                    if (calendarDaysTouchStart && calendarDaysTouchStart.element === dayElement) {
+                        // Vibrate if supported
+                        if (navigator.vibrate) {
+                            navigator.vibrate(50);
+                        }
+                        
+                        // Open day details
+                        this.openDayDetails(calendarDaysTouchStart.date);
+                        
+                        // Clear state
+                        calendarDaysTouchStart = null;
+                        calendarDaysPressTimer = null;
+                    }
+                }, CALENDAR_LONG_PRESS_DELAY);
+            }
+        }, { passive: true });
+        
+        document.addEventListener('touchmove', (e) => {
+            if (!calendarDaysTouchStart || !calendarDaysPressTimer) return;
+            
+            const touch = e.touches[0];
+            const deltaX = Math.abs(touch.clientX - calendarDaysTouchStart.x);
+            const deltaY = Math.abs(touch.clientY - calendarDaysTouchStart.y);
+            
+            if (deltaX > CALENDAR_MOVE_THRESHOLD || deltaY > CALENDAR_MOVE_THRESHOLD) {
+                // User is scrolling, cancel long-press
+                clearTimeout(calendarDaysPressTimer);
+                calendarDaysPressTimer = null;
+                calendarDaysTouchStart = null;
+            }
+        }, { passive: true });
+        
+        document.addEventListener('touchend', (e) => {
+            if (calendarDaysPressTimer) {
+                clearTimeout(calendarDaysPressTimer);
+                calendarDaysPressTimer = null;
+                calendarDaysTouchStart = null;
+            }
+        }, { passive: true });
+        
+        document.addEventListener('touchcancel', (e) => {
+            if (calendarDaysPressTimer) {
+                clearTimeout(calendarDaysPressTimer);
+                calendarDaysPressTimer = null;
+                calendarDaysTouchStart = null;
+            }
+        }, { passive: true });
     }
 
     async openDayDetails(dateString) {

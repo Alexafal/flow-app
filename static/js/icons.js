@@ -79,6 +79,20 @@ const FlowIcons = {
         </svg>
     `,
     
+    graph: `
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="5" cy="5" r="2"></circle>
+            <circle cx="19" cy="5" r="2"></circle>
+            <circle cx="5" cy="19" r="2"></circle>
+            <circle cx="19" cy="19" r="2"></circle>
+            <circle cx="12" cy="12" r="2"></circle>
+            <line x1="5" y1="5" x2="12" y2="12"></line>
+            <line x1="19" y1="5" x2="12" y2="12"></line>
+            <line x1="5" y1="19" x2="12" y2="12"></line>
+            <line x1="19" y1="19" x2="12" y2="12"></line>
+        </svg>
+    `,
+    
     settings: `
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="3"></circle>
